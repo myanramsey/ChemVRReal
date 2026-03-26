@@ -21,5 +21,33 @@ public class SpawnMolecule : MonoBehaviour
         GameObject moleculeInstance = GameObject.Instantiate(molecule, position, Quaternion.identity);
         int index = moleculeInstance.name.IndexOf("_");
         moleculeInstance.name = moleculeInstance.name.Substring(0, index);
+
+        Rigidbody rb = moleculeInstance.GetComponent<Rigidbody>();
+        var grab = moleculeInstance.GetComponent<UnityEngine.XR.Interaction.Toolkit.Interactables.XRGrabInteractable>();
+
+        if (rb != null)
+        {
+            rb.useGravity = false; 
+        }
+
+        if (grab != null)
+        {
+            grab.useDynamicAttach = true; 
+            grab.throwOnDetach = false;
+
+            grab.selectExited.AddListener((args) => {
+                if (rb != null)
+                {
+                    rb.linearVelocity = Vector3.zero;
+                    rb.angularVelocity = Vector3.zero;
+                    rb.isKinematic = true;
+                }
+            });
+
+            grab.selectEntered.AddListener((args) => {
+                if (rb != null)
+                    rb.isKinematic = false;
+            });  
+        }
     }
 }
