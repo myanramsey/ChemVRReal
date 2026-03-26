@@ -39,7 +39,45 @@ public class RayPointerLogger : MonoBehaviour
 
             // Update UI label every frame
             if (targetLabel != null)
-                targetLabel.text = $"Pointing at: {hitName}";
+            {
+                // Update with molecule being pointed at
+                string moleculeName = "";
+                GameObject molecule = null;
+                GameObject child = raycastHit?.collider?.gameObject;
+                molecule = child;
+                if (child != null)
+                {
+                    if (child.transform.parent != null)
+                    {
+                        GameObject parent1 = child.transform.parent.gameObject;
+                        molecule = parent1;
+                        if (parent1.transform.parent != null)
+                        {
+                            GameObject parent2 = parent1.transform.parent.gameObject;
+                            molecule = parent2;
+                            moleculeName = parent2.name;
+                        }
+                        else
+                        {
+                            moleculeName = parent1.name;
+                        }
+                    }
+                    else
+                    {
+                        moleculeName = child.name;
+                    }
+
+                    // Only displays name of object if object is a molecule
+                    if (molecule.tag == "Molecule")
+                    {
+                        targetLabel.text = $"{moleculeName}";
+                    }
+                    else
+                    {
+                        targetLabel.text = $"";
+                    }
+                }
+            }
         }
         else
         {
@@ -50,7 +88,7 @@ public class RayPointerLogger : MonoBehaviour
             }
 
             if (targetLabel != null)
-                targetLabel.text = "Pointing at: Nothing";
+                targetLabel.text = "";
         }
     }
 
