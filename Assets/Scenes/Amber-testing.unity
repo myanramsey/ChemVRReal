@@ -3858,6 +3858,7 @@ GameObject:
   - component: {fileID: 835399590}
   - component: {fileID: 835399591}
   - component: {fileID: 835399592}
+  - component: {fileID: 835399593}
   m_Layer: 0
   m_Name: LeftHand
   m_TagString: Untagged
@@ -3968,6 +3969,39 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RayPointerLogger
   rayInteractor: {fileID: 343356257}
   targetLabel: {fileID: 1558622474}
+--- !u!114 &835399593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 835399589}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13e6323dcb5e32248803f08675b970ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::OrbitalToggle
+  rayInteractor: {fileID: 343356257}
+  primaryButton:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Primary Button
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 14c75d00-40fc-473b-b63b-e70cf3b731c6
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings:
+      - m_Name: 
+        m_Id: 33cefefe-d502-4273-ba19-fcc075dbbf63
+        m_Path: <XRController>{LeftHand}/primaryButton
+        m_Interactions: Tap
+        m_Processors: 
+        m_Groups: 
+        m_Action: Primary Button
+        m_Flags: 0
+      m_Flags: 0
+    m_Reference: {fileID: -3599823989380923159, guid: b6d5c44ebe3244b7692e81ae8265eb22, type: 3}
 --- !u!1 &850173757
 GameObject:
   m_ObjectHideFlags: 0
