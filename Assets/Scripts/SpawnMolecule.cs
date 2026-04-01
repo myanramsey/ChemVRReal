@@ -32,7 +32,7 @@ public class SpawnMolecule : MonoBehaviour
         Vector3 position = t.position + spawnOffsets[spawnSlot];
         spawnSlot = (spawnSlot + 1) % spawnOffsets.Length;
         GameObject moleculeInstance = GameObject.Instantiate(molecule, position, Quaternion.identity);
-        int index = moleculeInstance.name.IndexOf("_");
+        int index = moleculeInstance.name.IndexOf("(");
         moleculeInstance.name = moleculeInstance.name.Substring(0, index);
 
         Rigidbody rb = moleculeInstance.GetComponent<Rigidbody>();
