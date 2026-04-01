@@ -40,7 +40,8 @@ public class SpawnMolecule : MonoBehaviour
 
         if (rb != null)
         {
-            rb.useGravity = false; 
+            rb.useGravity = false;
+            rb.isKinematic = true;
         }
 
         if (grab != null)
