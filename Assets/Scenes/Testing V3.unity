@@ -5086,6 +5086,8 @@ GameObject:
   - component: {fileID: 835399591}
   - component: {fileID: 835399592}
   - component: {fileID: 835399593}
+  - component: {fileID: 835399594}
+  - component: {fileID: 835399595}
   m_Layer: 0
   m_Name: LeftHand
   m_TagString: Untagged
@@ -5250,6 +5252,72 @@ MonoBehaviour:
       m_Flags: 0
     m_Reference: {fileID: 0}
   opacityStep: 0.1
+--- !u!114 &835399594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 835399589}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dea477c27562fd94ab3a7f0334a0459f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ToggleOrbitals
+  rayInteractor: {fileID: 343356257}
+  primaryButton:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Primary Button
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 4f1d17b7-c6a3-4587-9403-d4c18884d1e1
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings:
+      - m_Name: 
+        m_Id: 300a8823-1be6-478b-94ea-d93c6e948bb9
+        m_Path: <XRController>{LeftHand}/{PrimaryButton}
+        m_Interactions: 
+        m_Processors: 
+        m_Groups: 
+        m_Action: Primary Button
+        m_Flags: 0
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+--- !u!114 &835399595
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 835399589}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f8782393c7915a419023d70467ab1a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ToggleBackbone
+  rayInteractor: {fileID: 343356257}
+  primaryButton:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Primary Button
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: cc64545f-e2c5-4125-b11c-3129a23535be
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings:
+      - m_Name: 
+        m_Id: 39a109e4-5c3e-4ff7-882f-74e91000cbdd
+        m_Path: <XRController>{LeftHand}/{PrimaryButton}
+        m_Interactions: 
+        m_Processors: 
+        m_Groups: 
+        m_Action: Primary Button
+        m_Flags: 0
+      m_Flags: 0
+    m_Reference: {fileID: 0}
 --- !u!1 &838573025
 GameObject:
   m_ObjectHideFlags: 0
