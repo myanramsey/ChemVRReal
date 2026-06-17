@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,7 +8,7 @@ public class LoadScene : MonoBehaviour
     [Tooltip("The name of the scene that will be loaded.")]
     [SerializeField] private string sceneName;
 
-    // Loads scene by index
+    // Loads scene by name
     public void LoadSceneByName()
     {
         SceneManager.LoadScene(sceneName);
