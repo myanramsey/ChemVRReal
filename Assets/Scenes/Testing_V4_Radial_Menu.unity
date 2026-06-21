@@ -978,6 +978,7 @@ GameObject:
   - component: {fileID: 89705655}
   - component: {fileID: 89705656}
   - component: {fileID: 89705657}
+  - component: {fileID: 89705658}
   m_Layer: 0
   m_Name: RightHand
   m_TagString: Untagged
@@ -1144,6 +1145,21 @@ MonoBehaviour:
   scaleStep: 0.1
   minScale: 0.1
   maxScale: 5
+--- !u!114 &89705658
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 89705653}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 697b98d4b2d164d09a817bbe9267f54f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SetRaycastLineColor
+  radialSelection: {fileID: 2139456856}
+  lineRenderer: {fileID: 1590294734}
+  lineVisual: {fileID: 0}
 --- !u!1 &93400195
 GameObject:
   m_ObjectHideFlags: 0
@@ -2873,7 +2889,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1787346994484839025, guid: ad818c36731146e994540a1896ad8f24, type: 3}
       propertyPath: m_Name
-      value: Ray Interactor
+      value: Right Ray Interactor
       objectReference: {fileID: 0}
     - target: {fileID: 5888765399538998960, guid: ad818c36731146e994540a1896ad8f24, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2927,6 +2943,22 @@ PrefabInstance:
       propertyPath: m_UIPressInput.m_InputActionReferencePerformed
       value: 
       objectReference: {fileID: 3279264004350380116, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+    - target: {fileID: 7693184380767619946, guid: ad818c36731146e994540a1896ad8f24, type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7693184380767619946, guid: ad818c36731146e994540a1896ad8f24, type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7693184380767619946, guid: ad818c36731146e994540a1896ad8f24, type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7693184380767619946, guid: ad818c36731146e994540a1896ad8f24, type: 3}
+      propertyPath: m_Parameters.colorGradient.m_ColorSpace
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -10658,6 +10690,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6803edce0201f574f923fd9d10e5b30a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!120 &1590294734 stripped
+LineRenderer:
+  m_CorrespondingSourceObject: {fileID: 7693184380767619946, guid: ad818c36731146e994540a1896ad8f24, type: 3}
+  m_PrefabInstance: {fileID: 405620838}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1640619270
 GameObject:
   m_ObjectHideFlags: 0
@@ -12954,11 +12991,61 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d161af253b91e4d5da5d118d283f675f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  spawnButton:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Spawn Button
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 19690f95-b1d0-4da6-b647-48c3c3ecc973
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings:
+      - m_Name: 
+        m_Id: e305dcc8-e94a-4d2d-9588-2f012070799c
+        m_Path: <XRController>{RightHand}/{PrimaryButton}
+        m_Interactions: 
+        m_Processors: 
+        m_Groups: 
+        m_Action: Spawn Button
+        m_Flags: 0
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+  selectButton:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Select Button
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 0c77a8f7-715e-495f-a6f9-75bc726b65b7
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings:
+      - m_Name: 
+        m_Id: fed42cf8-c390-4d42-91ea-424edf4fdf28
+        m_Path: <XRController>{RightHand}/{SecondaryButton}
+        m_Interactions: 
+        m_Processors: 
+        m_Groups: 
+        m_Action: Select Button
+        m_Flags: 0
+      m_Flags: 0
+    m_Reference: {fileID: 0}
   numberofRadialParts: 6
   radialPartPrefab: {fileID: 1000412028389058626, guid: 97b5c23ee2cbc47d9b8fc459a5591602, type: 3}
   radialPartCanvas: {fileID: 414193440}
   angleBetweenRadialParts: 10
-  handTransform: {fileID: 887393945}
+  onRadialPartSelected:
+    m_PersistentCalls:
+      m_Calls: []
+  handTransform: {fileID: 89705654}
+  radialColors:
+  - {r: 0.16666651, g: 0, b: 1, a: 1}
+  - {r: 1, g: 0.0141509175, b: 0.0141509175, a: 0.9647059}
+  - {r: 0.044874907, g: 1, b: 0, a: 1}
+  - {r: 1, g: 0.995283, b: 0.995283, a: 1}
+  - {r: 0, g: 0, b: 0, a: 1}
+  - {r: 0.89601696, g: 0.9811321, b: 0, a: 1}
 --- !u!4 &2139456857
 Transform:
   m_ObjectHideFlags: 0
