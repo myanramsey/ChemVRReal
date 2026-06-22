@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f52fd12f3da5f432491d8dad74507144, type: 3}
+  m_Name: RadialMenuData
+  m_EditorClassIdentifier: Assembly-CSharp::RadialMenuData
+  menuName: Main Menu
+  options:
+  - id: raycast_colors
+    displayText: Raycast Color
+    displayColor: {r: 0.41509432, g: 0.41509432, b: 0.41509432, a: 1}
+    subMenu: {fileID: 11400000, guid: 9f8c00db22e7b4473ab65bc5854182ae, type: 2}
+  - id: room_colors
+    displayText: Room Colors
+    displayColor: {r: 0.5377358, g: 0.5377358, b: 0.5377358, a: 1}
+    subMenu: {fileID: 0}
+  - id: option3
+    displayText: Option3
+    displayColor: {r: 0.41509432, g: 0.41509432, b: 0.41509432, a: 1}
+    subMenu: {fileID: 0}
+  - id: option4
+    displayText: Option4
+    displayColor: {r: 0.5283019, g: 0.5283019, b: 0.5283019, a: 1}
+    subMenu: {fileID: 0}
+  - id: option5
+    displayText: Option5
+    displayColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    subMenu: {fileID: 11400000, guid: 9f8c00db22e7b4473ab65bc5854182ae, type: 2}
+  - id: option6
+    displayText: Option6
+    displayColor: {r: 1, g: 1, b: 1, a: 1}
+    subMenu: {fileID: 11400000, guid: 9f8c00db22e7b4473ab65bc5854182ae, type: 2}
