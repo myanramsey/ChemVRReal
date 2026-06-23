@@ -270,6 +270,7 @@ GameObject:
   - component: {fileID: 382045875662070060}
   - component: {fileID: 3560599714541470620}
   - component: {fileID: 821052248793977528}
+  - component: {fileID: 4353186718350588970}
   m_Layer: 0
   m_Name: BF3_MO#11
   m_TagString: Molecule
@@ -450,6 +451,24 @@ MonoBehaviour:
   m_LimitAngularVelocity: 0
   m_MaxLinearVelocityDelta: 10
   m_MaxAngularVelocityDelta: 20
+--- !u!114 &4353186718350588970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4505191997394223483}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMode: 0
+  outlineColor: {r: 0, g: 1, b: 0.115142465, a: 1}
+  outlineWidth: 5
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &6612621850132194808
 GameObject:
   m_ObjectHideFlags: 0

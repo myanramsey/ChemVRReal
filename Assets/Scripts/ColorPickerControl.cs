@@ -1,28 +1,42 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using static UnityEditor.Experimental.GraphView.Port;
 
 public class ColorPickerControl : MonoBehaviour
 {
-    public float currentHue, currentSat, currentVal;
+    private float currentHue, currentSat, currentVal = 0f;
+    private float currentOpacity = 1f;
 
-    private Texture2D hueTexture, svTexture, outTexture;
-
-    [SerializeField]
-    private RawImage hueImage, svImage, outImage;
+    private Texture2D hueTexture, svTexture, outTexture, opacityTexture;
 
     [SerializeField]
-    private Slider hueSlider;
+    private RawImage hueImage, svImage, outImage, opacityImage;
+
+    [SerializeField]
+    private Slider hueSlider, opacitySlider;
 
     [SerializeField]
     private TMP_InputField hexInputField;
 
-    [SerializeField]
-    MeshRenderer meshRenderer;
+    private Color startingColor, currentColor;
 
-    private void Start()
+    private GameObject molecule;
+
+    public MeshRenderer meshRenderer;
+
+    private void OnEnable()
     {
+        if (meshRenderer != null)
+        {
+            startingColor = meshRenderer.material.color;
+            currentColor = startingColor;
+            Color.RGBToHSV(currentColor, out currentHue, out currentSat, out currentVal);
+            currentOpacity = currentColor.a;
+        }
+
         CreateHueImage();
+        CreateOpacityImage();
         CreateSVImage();
         CreateOutputImage();
         UpdateObjectColor();
@@ -40,9 +54,27 @@ public class ColorPickerControl : MonoBehaviour
             hueTexture.SetPixel(0, i, Color.HSVToRGB((float)i / hueTexture.height, 1, 1.0f));
         }
         hueTexture.Apply();
-        currentHue = 0;
 
         hueImage.texture = hueTexture;
+    }
+
+    private void CreateOpacityImage()
+    {
+        opacityTexture = new Texture2D(1, 16);
+        opacityTexture.wrapMode = TextureWrapMode.Clamp;
+        opacityTexture.name = "OpacityTexture";
+
+        Color opacity = currentColor;
+
+        // Iterate through pixels of texture and set pixel opacity based on height
+        for (int i = 0; i < opacityTexture.height; i++)
+        {
+            opacity.a = 1.0f - ((float)i / opacityTexture.height);
+            opacityTexture.SetPixel(0, i, opacity);
+        }
+        opacityTexture.Apply();
+
+        opacityImage.texture = opacityTexture;
     }
 
     private void CreateSVImage()
@@ -60,8 +92,6 @@ public class ColorPickerControl : MonoBehaviour
             }
         }
         svTexture.Apply();
-        currentSat = 0;
-        currentVal = 0;
 
         svImage.texture = svTexture;
     }
@@ -87,12 +117,17 @@ public class ColorPickerControl : MonoBehaviour
     // Update GameObject's mesh renderer with selected color
     private void UpdateObjectColor()
     {
-        Color currentColor = Color.HSVToRGB(currentHue, currentSat, currentVal);
-        
+        currentColor = Color.HSVToRGB(currentHue, currentSat, currentVal);
+        Color opacity = currentColor;
+        currentColor.a = 1.0f - opacitySlider.value;
+
         for (int i = 0; i < outTexture.height; i++)
         {
+            opacity.a = 1.0f - ((float)i / opacityTexture.height);
+            opacityTexture.SetPixel(0, i, opacity);
             outTexture.SetPixel(0, i, currentColor);
         }
+        opacityTexture.Apply();
         outTexture.Apply();
 
         hexInputField.text = ColorUtility.ToHtmlStringRGB(currentColor);
@@ -142,5 +177,32 @@ public class ColorPickerControl : MonoBehaviour
         hexInputField.text = "";
 
         UpdateObjectColor();
+    }
+
+    // Closes color picker menu and returns GameObject to starting color
+    public void Back()
+    {
+        if (molecule == null) return;
+        if (meshRenderer == null) return;
+
+        molecule.GetComponent<Outline>().enabled = false;
+        meshRenderer.material.color = startingColor;
+        gameObject.SetActive(false);
+    }
+
+    // Closes color picker menu and leaves GameObject as confirmed color
+    public void Confirm()
+    {
+        if (molecule == null) return;
+        if (meshRenderer == null) return;
+
+        molecule.GetComponent<Outline>().enabled = false;
+        gameObject.SetActive(false);
+    }
+
+    // Sets reference to GameObject, whose color/opacity will be changed
+    public void SetGameObject(GameObject gameObject)
+    {
+        molecule = gameObject;
     }
 }
