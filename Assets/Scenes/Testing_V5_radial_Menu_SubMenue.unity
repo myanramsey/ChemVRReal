@@ -1113,8 +1113,8 @@ MonoBehaviour:
       m_Interactions: 
       m_SingletonActionBindings:
       - m_Name: 
-        m_Id: bd435fe7-ce26-4a45-a47c-b42e74f6a7c2
-        m_Path: <XRController>{RightHand}/{PrimaryButton}
+        m_Id: 4affe1d0-e82f-4e78-92ba-49287d1a7774
+        m_Path: <XRController>{RightHand}/{SecondaryButton}
         m_Interactions: 
         m_Processors: 
         m_Groups: 
@@ -1133,8 +1133,8 @@ MonoBehaviour:
       m_Interactions: 
       m_SingletonActionBindings:
       - m_Name: 
-        m_Id: 7f34f681-4149-4f6d-a889-3143a1fbd406
-        m_Path: <XRController>{RightHand}/{SecondaryButton}
+        m_Id: 7b96d1c8-e85b-41b7-9e18-87e640322360
+        m_Path: <XRController>{RightHand}/{PrimaryButton}
         m_Interactions: 
         m_Processors: 
         m_Groups: 
@@ -5629,6 +5629,7 @@ GameObject:
   - component: {fileID: 835399593}
   - component: {fileID: 835399594}
   - component: {fileID: 835399595}
+  - component: {fileID: 835399597}
   - component: {fileID: 835399596}
   m_Layer: 0
   m_Name: LeftHand
@@ -5764,8 +5765,8 @@ MonoBehaviour:
       m_Interactions: 
       m_SingletonActionBindings:
       - m_Name: 
-        m_Id: 7ac82d25-c67c-4feb-bf90-51d632ea5c45
-        m_Path: <XRController>{LeftHand}/{PrimaryButton}
+        m_Id: a75addf1-6edd-4e55-b1c6-fa6f1445583b
+        m_Path: <XRController>{LeftHand}/{SecondaryButton}
         m_Interactions: 
         m_Processors: 
         m_Groups: 
@@ -5784,8 +5785,8 @@ MonoBehaviour:
       m_Interactions: 
       m_SingletonActionBindings:
       - m_Name: 
-        m_Id: e396cff6-2121-4a37-ba54-33b0c1395e78
-        m_Path: <XRController>{LeftHand}/{SecondaryButton}
+        m_Id: 20015fd8-86c4-4bc6-883b-13b78e03c573
+        m_Path: <XRController>{LeftHand}/{PrimaryButton}
         m_Interactions: 
         m_Processors: 
         m_Groups: 
@@ -5890,6 +5891,39 @@ MonoBehaviour:
         m_Processors: 
         m_Groups: 
         m_Action: Menu Button
+        m_Flags: 0
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+--- !u!114 &835399597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 835399589}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 406b8022363047843aceeaae91fd870a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DeleteMolecule
+  rayInteractor: {fileID: 343356257}
+  primaryButton:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Primary Button
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 52e7ebab-3b11-4682-8ac1-43104df684fc
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings:
+      - m_Name: 
+        m_Id: c773740a-b7b3-430d-b51c-2071a59a451d
+        m_Path: <XRController>{LeftHand}/{PrimaryButton}
+        m_Interactions: 
+        m_Processors: 
+        m_Groups: 
+        m_Action: Primary Button
         m_Flags: 0
       m_Flags: 0
     m_Reference: {fileID: 0}
@@ -6819,6 +6853,10 @@ GameObject:
   - component: {fileID: 953719850}
   - component: {fileID: 953719849}
   - component: {fileID: 953719852}
+  - component: {fileID: 953719855}
+  - component: {fileID: 953719856}
+  - component: {fileID: 953719853}
+  - component: {fileID: 953719854}
   m_Layer: 5
   m_Name: Molecule Spawn Menu
   m_TagString: Untagged
@@ -6912,6 +6950,165 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RaycastTriggerInteraction: 1
+--- !u!114 &953719853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 953719847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a35f6cfbfba9b548aaa00d52cfe8a50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.XR.Interaction.Toolkit::UnityEngine.XR.Interaction.Toolkit.Interactables.XRSimpleInteractable
+  m_InteractionManager: {fileID: 0}
+  m_Colliders: []
+  m_InteractionLayers:
+    m_Bits: 1
+  m_DistanceCalculationMode: 1
+  m_SelectMode: 0
+  m_FocusMode: 1
+  m_CustomReticle: {fileID: 0}
+  m_AllowGazeInteraction: 0
+  m_AllowGazeSelect: 0
+  m_OverrideGazeTimeToSelect: 0
+  m_GazeTimeToSelect: 0.5
+  m_OverrideTimeToAutoDeselectGaze: 0
+  m_TimeToAutoDeselectGaze: 3
+  m_AllowGazeAssistance: 0
+  m_FirstHoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_LastHoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_HoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_HoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FirstSelectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_LastSelectExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_SelectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_SelectExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FirstFocusEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_LastFocusExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FocusEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FocusExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Activated:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Deactivated:
+    m_PersistentCalls:
+      m_Calls: []
+  m_StartingHoverFilters: []
+  m_StartingSelectFilters: []
+  m_StartingInteractionStrengthFilters: []
+  m_AutoFindParentInteractableInHierarchy: 0
+  m_ParentInteractableObject: {fileID: 0}
+--- !u!114 &953719854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 953719847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28bc0684d997c894e987b8f2bfb80f19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PullPanel
+  vrPlayer: {fileID: 1419543983}
+  rayInteractor: {fileID: 1590294730}
+  gripButton:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Grip Button
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 219a87fb-8f8f-4675-a137-82cdeb91b29f
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings:
+      - m_Name: 
+        m_Id: 081e2c6d-d46a-4b58-a4c6-d3f8a6e21294
+        m_Path: <XRController>{RightHand}/{GripButton}
+        m_Interactions: 
+        m_Processors: 
+        m_Groups: 
+        m_Action: Grip Button
+        m_Flags: 0
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+  distanceFromPlayer: 1
+  moveSpeed: 5
+  minDistance: 2
+--- !u!65 &953719855
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 953719847}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 425.8567, y: 572.2158, z: 43.276016}
+  m_Center: {x: -6.6977015, y: 0.8095763, z: -1.7354662}
+--- !u!54 &953719856
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 953719847}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &987622151
 GameObject:
   m_ObjectHideFlags: 0
@@ -12726,6 +12923,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LoadScene
   sceneName: Main Menu
+  sceneIndex: 0
 --- !u!1 &2085568210
 GameObject:
   m_ObjectHideFlags: 0

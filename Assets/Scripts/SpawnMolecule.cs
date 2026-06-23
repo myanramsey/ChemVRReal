@@ -8,7 +8,7 @@ public class SpawnMolecule : MonoBehaviour
 
     // Spawn slots spread along the X axis, shared across all spawn buttons.
     // Cycles: slot 0 -> slot 1 -> slot 2 -> slot 0 -> ...
-    private static readonly Vector3[] spawnOffsets = new Vector3[]
+    /*private static readonly Vector3[] spawnOffsets = new Vector3[]
     {
         new Vector3(-3.75f, 0f, 1.5f),
         new Vector3(-2.25f, 0f, 1.5f),
@@ -17,7 +17,7 @@ public class SpawnMolecule : MonoBehaviour
         new Vector3( 2.25f, 0f, 1.5f),
         new Vector3( 3.75f, 0f, 1.5f),
     };
-    private static int spawnSlot = 0;
+    private static int spawnSlot = 0;*/
 
     private void Start()
     {
@@ -26,11 +26,12 @@ public class SpawnMolecule : MonoBehaviour
 
     public void Spawn()
     {
-        // Spawns molecule at the next slot in the round-robin line
         string prefabName = this.gameObject.name;
         GameObject molecule = Resources.Load<GameObject>(prefabName);
-        Vector3 position = t.position + spawnOffsets[spawnSlot];
-        spawnSlot = (spawnSlot + 1) % spawnOffsets.Length;
+        // Spawns molecule at the next slot in the round-robin line
+        /*Vector3 position = t.position + spawnOffsets[spawnSlot];
+        spawnSlot = (spawnSlot + 1) % spawnOffsets.Length;*/
+        Vector3 position = t.position + t.right * 0.75f;
         GameObject moleculeInstance = GameObject.Instantiate(molecule, position, Quaternion.identity);
         int index = moleculeInstance.name.IndexOf("(");
         moleculeInstance.name = moleculeInstance.name.Substring(0, index);
