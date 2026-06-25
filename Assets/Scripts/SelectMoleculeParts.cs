@@ -16,7 +16,7 @@ public class SelectMoleculeParts : MonoBehaviour
     private MeshRenderer mr = null;
     private MeshRenderer mr2 = null;
 
-    private GameObject lastSelectedPart, lastSelectedPart2;
+    private GameObject lastSelectedPart, lastSelectedPart2, currentMolecule, lastMolecule;
 
     private void Start()
     {
@@ -52,6 +52,16 @@ public class SelectMoleculeParts : MonoBehaviour
         // Find part of molecule that was hit by raycast
         GameObject hit = raycastHit.Value.collider?.gameObject;
         if (hit == null) return;
+
+        if (hit.transform.parent != null)
+        {
+            currentMolecule = hit.transform.parent.gameObject;
+            if (currentMolecule.transform.parent != null)
+            {
+                currentMolecule = currentMolecule.transform.parent.gameObject;
+            } 
+        }
+        if (currentMolecule != lastMolecule && lastMolecule != null) return;
 
         GameObject moleculePart = hit;
         GameObject moleculePart2 = null;
@@ -90,9 +100,9 @@ public class SelectMoleculeParts : MonoBehaviour
                 }
             }
         }
-
+        
         // Remove highlight around the entire molecule
-        scm.GetGameObject().GetComponent<Outline>().enabled = false;
+        //scm.GetGameObject().GetComponent<Outline>().enabled = false;
 
         // Remove highlight from previously selected part
         if (lastSelectedPart != moleculePart && lastSelectedPart != null)
@@ -112,6 +122,8 @@ public class SelectMoleculeParts : MonoBehaviour
         }
 
         lastSelectedPart = moleculePart;
+        lastSelectedPart2 = moleculePart2;
+        lastMolecule = scm.GetGameObject();
 
         // Send the MeshRenderer of the part of molecule that will be changed to ColorPickerControl script
         cpc = colorPickerMenu.GetComponent<ColorPickerControl>();
@@ -120,5 +132,11 @@ public class SelectMoleculeParts : MonoBehaviour
         // Reset MeshRenderers
         mr = null;
         mr2 = null;
+    }
+
+    public void ResetSelectedMolecule()
+    {
+        currentMolecule = null;
+        lastMolecule = null;
     }
 }
