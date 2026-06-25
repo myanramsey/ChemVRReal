@@ -1,12 +1,11 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using static UnityEditor.Experimental.GraphView.Port;
+using System.Collections.Generic;
 
 public class ColorPickerControl : MonoBehaviour
 {
     private float currentHue, currentSat, currentVal = 0f;
-    private float currentOpacity = 1f;
 
     private Texture2D hueTexture, svTexture, outTexture, opacityTexture;
 
@@ -19,7 +18,10 @@ public class ColorPickerControl : MonoBehaviour
     [SerializeField]
     private TMP_InputField hexInputField;
 
-    private Color startingColor, startingColor2, currentColor;
+    private Color currentColor;
+    private List<Color> orbitalColors = new List<Color>();
+    private List<Color> atomColors = new List<Color>();
+    private List<Color> atomVertexColors = new List<Color>();
 
     private GameObject molecule;
 
@@ -131,10 +133,28 @@ public class ColorPickerControl : MonoBehaviour
         if (meshRenderer != null)
         {
             meshRenderer.material.color = currentColor;
+
+            // Set vertex colors to white so material color can show properly
+            Mesh mesh = meshRenderer.gameObject.GetComponent<MeshFilter>().mesh;
+            Color[] colors = mesh.colors;
+            for (int i = 0; i < colors.Length; i++)
+            {
+                colors[i] = Color.white;
+            }
+            mesh.colors = colors;
         }
         if (meshRenderer2 != null)
         {
             meshRenderer2.material.color = currentColor;
+
+            // Set vertex colors to white so material color can show properly
+            Mesh mesh2 = meshRenderer2.gameObject.GetComponent<MeshFilter>().mesh;
+            Color[] colors2 = mesh2.colors;
+            for (int i = 0; i < colors2.Length; i++)
+            {
+                colors2[i] = Color.white;
+            }
+            mesh2.colors = colors2;
         }
     }
 
@@ -185,7 +205,7 @@ public class ColorPickerControl : MonoBehaviour
     // Closes color picker menu and returns GameObject to starting color
     public void Back()
     {
-        molecule.GetComponent<Outline>().enabled = false;
+        //molecule.GetComponent<Outline>().enabled = false;
 
         if (meshRenderer == null)
         {
@@ -193,15 +213,45 @@ public class ColorPickerControl : MonoBehaviour
             return;
         }
 
+        // Remove selection part outlines
         meshRenderer.gameObject.GetComponent<Outline>().enabled = false;
-        meshRenderer.material.color = startingColor;
         if (meshRenderer2 != null)
         {
-            meshRenderer2.material.color = startingColor2;
             meshRenderer2.gameObject.GetComponent<Outline>().enabled = false;
         }
 
+        // Revert back to original colors/opacity for all parts of the molecule
+        RevertColors();
+
         gameObject.SetActive(false);
+    }
+
+    // Revert back to original colors/opacity for all parts of the molecule
+    private void RevertColors()
+    {
+        // Orbitals
+        for (int i = 0; i < molecule.transform.GetChild(0).childCount; i++)
+        {
+            GameObject orbital = molecule.transform.GetChild(0).GetChild(i).gameObject;
+            orbital.GetComponent<MeshRenderer>().material.color = orbitalColors[i];
+        }
+
+        // Atoms and Bonds
+        for (int i = 0; i < molecule.transform.GetChild(1).childCount; i++)
+        {
+            // Reset material color
+            GameObject atom = molecule.transform.GetChild(1).GetChild(i).gameObject;
+            atom.GetComponent<MeshRenderer>().material.color = atomColors[i];
+
+            // Reset vertex color
+            Mesh mesh = atom.GetComponent<MeshFilter>().mesh;
+            Color[] colors = new Color[mesh.colors.Length];
+            for (int j = 0; j < colors.Length; j++)
+            {
+                colors[j] = atomVertexColors[i];
+            }
+            mesh.colors = colors;
+        }
     }
 
     // Closes color picker menu and leaves GameObject as confirmed color
@@ -209,8 +259,9 @@ public class ColorPickerControl : MonoBehaviour
     {
         if (meshRenderer == null) return;
 
-        molecule.GetComponent<Outline>().enabled = false;
+        //molecule.GetComponent<Outline>().enabled = false;
 
+        // Remove selection part outlines
         meshRenderer.gameObject.GetComponent<Outline>().enabled = false;
         if (meshRenderer2 != null)
         {
@@ -224,6 +275,32 @@ public class ColorPickerControl : MonoBehaviour
     public void SetGameObject(GameObject gameObject)
     {
         molecule = gameObject;
+
+        // Save the material colors of all parts of the molecule
+        orbitalColors.Clear();
+        atomColors.Clear();
+
+        // Orbitals
+        for (int i = 0; i < molecule.transform.GetChild(0).childCount; i++)
+        {
+            GameObject orbital = molecule.transform.GetChild(0).GetChild(i).gameObject;
+            Color orbitalColor = orbital.GetComponent<MeshRenderer>().material.color;
+            orbitalColors.Add(orbitalColor);
+        }
+
+        // Atoms and Bonds
+        for (int i = 0; i < molecule.transform.GetChild(1).childCount; i++)
+        {
+            GameObject atom = molecule.transform.GetChild(1).GetChild(i).gameObject;
+            Color atomColor = atom.GetComponent<MeshRenderer>().material.color;
+            atomColors.Add(atomColor);
+
+            // Save vertex colors
+            Mesh mesh = atom.GetComponent<MeshFilter>().mesh;
+            Color[] colors = mesh.colors;
+            Color color = colors[0];
+            atomVertexColors.Add(color);
+        }
     }
 
     // Sets reference to MeshRenderer of part of molecule whose color/opacity will be changed
@@ -231,11 +308,5 @@ public class ColorPickerControl : MonoBehaviour
     {
         meshRenderer = mr;
         meshRenderer2 = mr2;
-
-        startingColor = meshRenderer.material.color;
-        if (meshRenderer2 != null)
-        {
-            startingColor2 = meshRenderer2.material.color;
-        }
     }
 }

@@ -65,7 +65,7 @@ public class SpawnColorMenu : MonoBehaviour
         if (molecule.transform.childCount == 0) return;
 
         // Highlight selected molecule
-        molecule.GetComponent<Outline>().enabled = true;
+        //molecule.GetComponent<Outline>().enabled = true;
 
         // Spawn color picker menu in front and facing player
         Vector3 targetPos = vrPlayer.position + (vrPlayer.forward * 2f);
