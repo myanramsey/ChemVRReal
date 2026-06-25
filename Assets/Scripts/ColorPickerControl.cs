@@ -19,21 +19,17 @@ public class ColorPickerControl : MonoBehaviour
     [SerializeField]
     private TMP_InputField hexInputField;
 
-    private Color startingColor, currentColor;
+    private Color startingColor, startingColor2, currentColor;
 
     private GameObject molecule;
 
-    public MeshRenderer meshRenderer;
+    private MeshRenderer meshRenderer;
+    private MeshRenderer meshRenderer2;
 
     private void OnEnable()
     {
-        if (meshRenderer != null)
-        {
-            startingColor = meshRenderer.material.color;
-            currentColor = startingColor;
-            Color.RGBToHSV(currentColor, out currentHue, out currentSat, out currentVal);
-            currentOpacity = currentColor.a;
-        }
+        meshRenderer = null;
+        meshRenderer2 = null;
 
         CreateHueImage();
         CreateOpacityImage();
@@ -132,7 +128,14 @@ public class ColorPickerControl : MonoBehaviour
 
         hexInputField.text = ColorUtility.ToHtmlStringRGB(currentColor);
 
-        meshRenderer.material.color = currentColor;
+        if (meshRenderer != null)
+        {
+            meshRenderer.material.color = currentColor;
+        }
+        if (meshRenderer2 != null)
+        {
+            meshRenderer2.material.color = currentColor;
+        }
     }
 
     // Update the SV panel whenever saturation and/or value are changed
@@ -182,27 +185,57 @@ public class ColorPickerControl : MonoBehaviour
     // Closes color picker menu and returns GameObject to starting color
     public void Back()
     {
-        if (molecule == null) return;
-        if (meshRenderer == null) return;
-
         molecule.GetComponent<Outline>().enabled = false;
+
+        if (meshRenderer == null)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
+
+        meshRenderer.gameObject.GetComponent<Outline>().enabled = false;
         meshRenderer.material.color = startingColor;
+        if (meshRenderer2 != null)
+        {
+            meshRenderer2.material.color = startingColor2;
+            meshRenderer2.gameObject.GetComponent<Outline>().enabled = false;
+        }
+
         gameObject.SetActive(false);
     }
 
     // Closes color picker menu and leaves GameObject as confirmed color
     public void Confirm()
     {
-        if (molecule == null) return;
         if (meshRenderer == null) return;
 
         molecule.GetComponent<Outline>().enabled = false;
+
+        meshRenderer.gameObject.GetComponent<Outline>().enabled = false;
+        if (meshRenderer2 != null)
+        {
+            meshRenderer2.gameObject.GetComponent<Outline>().enabled = false;
+        }
+
         gameObject.SetActive(false);
     }
 
-    // Sets reference to GameObject, whose color/opacity will be changed
+    // Sets reference to molecule GameObject whose color/opacity will be changed
     public void SetGameObject(GameObject gameObject)
     {
         molecule = gameObject;
+    }
+
+    // Sets reference to MeshRenderer of part of molecule whose color/opacity will be changed
+    public void SetMeshRenderer(MeshRenderer mr, MeshRenderer mr2)
+    {
+        meshRenderer = mr;
+        meshRenderer2 = mr2;
+
+        startingColor = meshRenderer.material.color;
+        if (meshRenderer2 != null)
+        {
+            startingColor2 = meshRenderer2.material.color;
+        }
     }
 }

@@ -12,6 +12,8 @@ public class SpawnColorMenu : MonoBehaviour
 
     private ColorPickerControl cpc;
 
+    private GameObject molecule;
+
     private float height;
 
     private bool isOpen = false;
@@ -51,7 +53,7 @@ public class SpawnColorMenu : MonoBehaviour
         GameObject hit = raycastHit.Value.collider?.gameObject;
         if (hit == null) return;
 
-        GameObject molecule = hit;
+        molecule = hit;
         if (hit.transform.parent != null)
         {
             molecule = hit.transform.parent.gameObject;
@@ -72,14 +74,26 @@ public class SpawnColorMenu : MonoBehaviour
         colorPickerMenu.transform.rotation = Quaternion.LookRotation(vrPlayer.forward);
         colorPickerMenu.SetActive(true);
 
-        // Send which GameObject's color/opacity will be changed to ColorPickerControl script
+        // Send selected molecule to ColorPickerControl script
         cpc = colorPickerMenu.GetComponent<ColorPickerControl>();
         cpc.SetGameObject(molecule);
+
+        // Update isOpen to true to allow selection of individual parts of the molecule
         isOpen = true;
     }
 
     public void SetIsOpen(bool open)
     {
         isOpen = open;
+    }
+
+    public bool GetIsOpen()
+    {
+        return isOpen;
+    }
+
+    public GameObject GetGameObject()
+    {
+        return molecule;
     }
 }
