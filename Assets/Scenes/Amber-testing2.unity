@@ -1372,7 +1372,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b84924d2c03f34d49947147d45893069, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnColorMenu
-  vrPlayer: {fileID: 1419543983}
+  xrOrigin: {fileID: 1419543982}
   rayInteractor: {fileID: 1590294730}
   primaryButton:
     m_UseReference: 0
@@ -1407,7 +1407,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c5247995698ed44a8e000fbd4d76ec4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SelectMoleculeParts
-  vrPlayer: {fileID: 1419543983}
   rayInteractor: {fileID: 1590294730}
   primaryButton:
     m_UseReference: 0
@@ -8296,7 +8295,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28bc0684d997c894e987b8f2bfb80f19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PullPanel
-  vrPlayer: {fileID: 1419543983}
+  xrOrigin: {fileID: 1419543982}
   rayInteractor: {fileID: 1590294730}
   gripButton:
     m_UseReference: 0
@@ -15555,7 +15554,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28bc0684d997c894e987b8f2bfb80f19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PullPanel
-  vrPlayer: {fileID: 1419543983}
+  xrOrigin: {fileID: 1419543982}
   rayInteractor: {fileID: 1590294730}
   gripButton:
     m_UseReference: 0

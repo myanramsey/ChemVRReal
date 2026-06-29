@@ -1,10 +1,11 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Unity.XR.CoreUtils;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public class MovePanel : MonoBehaviour
 {
-    [SerializeField] private Transform vrPlayer;
+    [SerializeField] private XROrigin xrOrigin;
     [SerializeField] private XRRayInteractor rayInteractor;
     [SerializeField] private InputActionProperty gripButton;
 
@@ -45,6 +46,8 @@ public class MovePanel : MonoBehaviour
 
     public void EnablePullOrDrag()
     {
+        Transform vrPlayer = xrOrigin.Camera.transform;
+
         float distanceFromPlayer = Vector3.Distance(transform.position, vrPlayer.position);
         if (distanceFromPlayer < minDistance)
         {
@@ -115,6 +118,8 @@ public class MovePanel : MonoBehaviour
     // Pulls UI panel from a distance towards player and facing player 
     private void PullPanel()
     {
+        Transform vrPlayer = xrOrigin.Camera.transform;
+
         Vector3 targetPos = vrPlayer.position + (vrPlayer.forward * distanceFromPlayer);
         targetPos.y = height;
         transform.position = Vector3.Lerp(transform.position, targetPos, Time.deltaTime * moveSpeed);
@@ -135,6 +140,8 @@ public class MovePanel : MonoBehaviour
         {
             grabOffset = transform.position - raycastHit.point;
         }
+        Transform vrPlayer = xrOrigin.Camera.transform;
+
         Vector3 targetPoint = ray.GetPoint(distance) + grabOffset;
         transform.position = Vector3.Lerp(transform.position, targetPoint, Time.deltaTime * moveSpeed);
 

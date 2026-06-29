@@ -4,7 +4,6 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public class SelectMoleculeParts : MonoBehaviour
 {
-    [SerializeField] private Transform vrPlayer;
     [SerializeField] private XRRayInteractor rayInteractor;
     [SerializeField] private InputActionProperty primaryButton;
 
