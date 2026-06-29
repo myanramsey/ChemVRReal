@@ -1,10 +1,11 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Unity.XR.CoreUtils;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public class SpawnColorMenu : MonoBehaviour
 {
-    [SerializeField] private Transform vrPlayer;
+    [SerializeField] private XROrigin xrOrigin;
     [SerializeField] private XRRayInteractor rayInteractor;
     [SerializeField] private InputActionProperty primaryButton;
 
@@ -15,12 +16,16 @@ public class SpawnColorMenu : MonoBehaviour
     private GameObject molecule;
 
     private float height;
+    private float xRot;
+    private float zRot;
 
     private bool isOpen = false;
 
     private void Start()
     {
         height = colorPickerMenu.transform.position.y;
+        xRot = colorPickerMenu.transform.rotation.eulerAngles.x;
+        zRot = colorPickerMenu.transform.rotation.eulerAngles.z;
     }
 
     private void OnEnable()
@@ -68,10 +73,15 @@ public class SpawnColorMenu : MonoBehaviour
         //molecule.GetComponent<Outline>().enabled = true;
 
         // Spawn color picker menu in front and facing player
+        Transform vrPlayer = xrOrigin.Camera.transform;
+
         Vector3 targetPos = vrPlayer.position + (vrPlayer.forward * 2f);
         targetPos.y = height;
         colorPickerMenu.transform.position = targetPos;
-        colorPickerMenu.transform.rotation = Quaternion.LookRotation(vrPlayer.forward);
+
+        Quaternion targetRot = Quaternion.LookRotation(vrPlayer.forward);
+        colorPickerMenu.transform.rotation = Quaternion.Euler(xRot, targetRot.eulerAngles.y, zRot);
+
         colorPickerMenu.SetActive(true);
 
         // Send selected molecule to ColorPickerControl script
