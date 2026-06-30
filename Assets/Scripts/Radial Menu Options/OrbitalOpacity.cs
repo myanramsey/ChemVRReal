@@ -39,6 +39,13 @@ public class OrbitalOpacity : MonoBehaviour
         bool decrease = decreaseOpacityButton.action.WasPressedThisFrame();
 
         if (!increase && !decrease) return;
+
+        AdjustOpacity(increase);
+    }
+
+    // Called by Update (button press) or RaycastAlphaMenuOption (radial menu).
+    public void AdjustOpacity(bool increase)
+    {
         if (rayInteractor == null) return;
 
         rayInteractor.TryGetCurrentRaycast(
@@ -54,18 +61,12 @@ public class OrbitalOpacity : MonoBehaviour
         GameObject hit = raycastHit.Value.collider?.gameObject;
         if (hit == null) return;
 
-        // Walk up hierarchy until we find the Molecule-tagged root.
-        // FIX: old code always walked exactly 2 levels, causing it to overshoot
-        // past the molecule root when atoms were direct children (depth mismatch).
         GameObject molecule = FindMoleculeRoot(hit);
         if (molecule == null) return;
 
-        // Find the child whose name ends with ".cub" — the orbital surface.
-        // Order of .cub/.pdb children varies per prefab so we can't use GetChild(0).
         Transform orbitalRoot = FindCubChild(molecule.transform);
         if (orbitalRoot == null) return;
 
-        // Seed opacity from the actual material if we haven't tracked it yet.
         if (!orbitalOpacities.ContainsKey(molecule))
             orbitalOpacities[molecule] = ReadOpacity(orbitalRoot);
 

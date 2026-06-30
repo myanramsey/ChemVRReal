@@ -15,11 +15,17 @@ public class RadialMenuController : MonoBehaviour
     public Transform handTransform;
     public float angleBetweenRadialParts = 5f;
 
+    [Header("Label Settings")]
+    public float labelRadius = 80f;
+    public int labelFontSize = 18;
+    public Color labelColor = Color.white;
+
     [Header("State")]
     public RadialMenuData currentMenu;
     public RadialMenuSelectionEvent onOptionConfirmed;
 
     private readonly List<GameObject> spawnedParts = new List<GameObject>();
+    private readonly List<GameObject> spawnedImageParts = new List<GameObject>();
     private int currentSelectedIndex = -1;
     private bool menuOpen = false;
 
@@ -92,14 +98,14 @@ public class RadialMenuController : MonoBehaviour
 
         int partCount = currentMenu.options.Length;
 
+        // First pass: create all image slices so they are low in the hierarchy.
         for (int i = 0; i < partCount; i++)
         {
             float angle = -i * 360f / partCount - angleBetweenRadialParts / 2f;
-            Vector3 eulerAngles = new Vector3(0f, 0f, angle);
 
             GameObject part = Instantiate(radialPartPrefab, radialPartCanvas);
             part.transform.localPosition = Vector3.zero;
-            part.transform.localEulerAngles = eulerAngles;
+            part.transform.localEulerAngles = new Vector3(0f, 0f, angle);
             part.transform.localScale = Vector3.one;
 
             Image image = part.GetComponent<Image>();
@@ -110,7 +116,42 @@ public class RadialMenuController : MonoBehaviour
             }
 
             spawnedParts.Add(part);
+            spawnedImageParts.Add(part);
         }
+
+        // Second pass: create all labels after all images so they render on top.
+        for (int i = 0; i < partCount; i++)
+        {
+            AddLabel(currentMenu.options[i].displayText, i, partCount);
+        }
+    }
+
+    void AddLabel(string text, int index, int totalCount)
+    {
+        // Slices rotate clockwise (negative Z). To match, use a positive clockwise
+        // angle so sin/cos place the label inside the correct slice.
+        float sliceAngleDeg = 360f / totalCount;
+        float midAngleDeg = index * sliceAngleDeg + sliceAngleDeg / 2f;
+        float midAngleRad = midAngleDeg * Mathf.Deg2Rad;
+
+        float labelX = Mathf.Sin(midAngleRad) * labelRadius;
+        float labelY = Mathf.Cos(midAngleRad) * labelRadius;
+
+        GameObject labelObj = new GameObject("Label_" + index);
+        labelObj.transform.SetParent(radialPartCanvas, false);
+
+        RectTransform rt = labelObj.AddComponent<RectTransform>();
+        rt.anchoredPosition = new Vector2(labelX, labelY);
+        rt.sizeDelta = new Vector2(100f, 40f);
+
+        Text uiText = labelObj.AddComponent<Text>();
+        uiText.text = text;
+        uiText.fontSize = labelFontSize;
+        uiText.color = labelColor;
+        uiText.alignment = TextAnchor.MiddleCenter;
+        uiText.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+
+        spawnedParts.Add(labelObj);
     }
 
     void ClearMenu()
@@ -122,6 +163,7 @@ public class RadialMenuController : MonoBehaviour
         }
 
         spawnedParts.Clear();
+        spawnedImageParts.Clear();
     }
 
     void UpdateSelection()
@@ -142,9 +184,9 @@ public class RadialMenuController : MonoBehaviour
             currentMenu.options.Length - 1
         );
 
-        for (int i = 0; i < spawnedParts.Count; i++)
+        for (int i = 0; i < spawnedImageParts.Count; i++)
         {
-            Image image = spawnedParts[i].GetComponent<Image>();
+            Image image = spawnedImageParts[i].GetComponent<Image>();
             if (image == null)
                 continue;
 
@@ -153,12 +195,12 @@ public class RadialMenuController : MonoBehaviour
             if (i == currentSelectedIndex)
             {
                 image.color = baseColor;
-                spawnedParts[i].transform.localScale = Vector3.one * 1.1f;
+                spawnedImageParts[i].transform.localScale = Vector3.one * 1.1f;
             }
             else
             {
                 image.color = new Color(baseColor.r * 0.45f, baseColor.g * 0.45f, baseColor.b * 0.45f, baseColor.a);
-                spawnedParts[i].transform.localScale = Vector3.one;
+                spawnedImageParts[i].transform.localScale = Vector3.one;
             }
         }
     }
