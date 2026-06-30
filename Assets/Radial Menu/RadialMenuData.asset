@@ -14,27 +14,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RadialMenuData
   menuName: Main Menu
   options:
-  - id: raycast_colors
-    displayText: Raycast Color
-    displayColor: {r: 0.41509432, g: 0.41509432, b: 0.41509432, a: 1}
-    subMenu: {fileID: 11400000, guid: 9f8c00db22e7b4473ab65bc5854182ae, type: 2}
-  - id: room_colors
-    displayText: Room Colors
-    displayColor: {r: 0.5377358, g: 0.5377358, b: 0.5377358, a: 1}
+  - id: mol_select
+    displayText: Molecule Select
+    displayColor: {r: 0.9, g: 0.75, b: 0.1, a: 1}
     subMenu: {fileID: 0}
-  - id: option3
-    displayText: Option3
-    displayColor: {r: 0.41509432, g: 0.41509432, b: 0.41509432, a: 1}
+  - id: delete_mol
+    displayText: Delete Molecule
+    displayColor: {r: 0.9, g: 0.15, b: 0.15, a: 1}
     subMenu: {fileID: 0}
-  - id: option4
-    displayText: Option4
-    displayColor: {r: 0.5283019, g: 0.5283019, b: 0.5283019, a: 1}
-    subMenu: {fileID: 0}
-  - id: option5
-    displayText: Option5
-    displayColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    subMenu: {fileID: 11400000, guid: 9f8c00db22e7b4473ab65bc5854182ae, type: 2}
-  - id: option6
-    displayText: Option6
-    displayColor: {r: 1, g: 1, b: 1, a: 1}
-    subMenu: {fileID: 11400000, guid: 9f8c00db22e7b4473ab65bc5854182ae, type: 2}
+  - id: mol_size
+    displayText: Size
+    displayColor: {r: 0.2, g: 0.6, b: 1, a: 1}
+    subMenu: {fileID: 11400000, guid: a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6, type: 2}
+  - id: orb_opacity
+    displayText: Orbital Opacity
+    displayColor: {r: 0.5, g: 0.2, b: 0.9, a: 1}
+    subMenu: {fileID: 11400000, guid: b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7, type: 2}
+  - id: ray_settings
+    displayText: Raycast Settings
+    displayColor: {r: 0.1, g: 0.85, b: 0.85, a: 1}
+    subMenu: {fileID: 11400000, guid: c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8, type: 2}
+  - id: room_select
+    displayText: Room Selection
+    displayColor: {r: 0.2, g: 0.75, b: 0.35, a: 1}
+    subMenu: {fileID: 11400000, guid: d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9, type: 2}
