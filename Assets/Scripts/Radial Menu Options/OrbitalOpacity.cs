@@ -1,130 +1,112 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
+using UnityEngine.XR.Interaction.Toolkit.Interactables;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
-// Attach to the XR controller. Assign rayInteractor, increaseOpacityButton, and
-// decreaseOpacityButton in the Inspector. Point the ray at a molecule and press
-// either button to step its orbital (.cub surface) opacity up or down.
+// Attach to the XR controller. Assign rayInteractor and radialMenuController.
+// Point the ray at a molecule, enter the Orbital Opacity submenu from the
+// radial menu, then select More Opaque / More Transparent to adjust the
+// .cub orbital surface alpha.
 public class OrbitalOpacity : MonoBehaviour
 {
     [SerializeField] private XRRayInteractor rayInteractor;
-
-    [Header("Buttons")]
-    public InputActionProperty increaseOpacityButton;
-    public InputActionProperty decreaseOpacityButton;
+    public RadialMenuController radialMenuController;
 
     [Header("Settings")]
     [Range(0.05f, 0.5f)]
-    public float opacityStep = 0.1f;
+    public float opacityStep = 0.15f;
 
-    // Per-molecule opacity tracking
-    private Dictionary<GameObject, float> orbitalOpacities = new Dictionary<GameObject, float>();
+    private GameObject _lockedMolecule;
+    private readonly Dictionary<GameObject, float> _opacities = new Dictionary<GameObject, float>();
 
-    private void OnEnable()
+    void Start()
     {
-        increaseOpacityButton.action.Enable();
-        decreaseOpacityButton.action.Enable();
+        if (radialMenuController == null) { Debug.LogError("[OrbitalOpacity] radialMenuController not assigned!"); return; }
+        radialMenuController.onOptionConfirmed.AddListener(HandleOption);
     }
 
-    private void OnDisable()
+    void OnDestroy()
     {
-        increaseOpacityButton.action.Disable();
-        decreaseOpacityButton.action.Disable();
+        if (radialMenuController != null)
+            radialMenuController.onOptionConfirmed.RemoveListener(HandleOption);
     }
 
-    private void Update()
+    void HandleOption(RadialMenuOption option)
     {
-        bool increase = increaseOpacityButton.action.WasPressedThisFrame();
-        bool decrease = decreaseOpacityButton.action.WasPressedThisFrame();
+        switch (option.id)
+        {
+            case "orb_opacity":
+                _lockedMolecule = GetAimedMolecule();
+                Debug.Log($"[OrbitalOpacity] Locked: {(_lockedMolecule != null ? _lockedMolecule.name : "none")}");
+                break;
 
-        if (!increase && !decrease) return;
-        if (rayInteractor == null) return;
-
-        rayInteractor.TryGetCurrentRaycast(
-            out RaycastHit? raycastHit,
-            out _,
-            out _,
-            out _,
-            out bool isUIHitClosest
-        );
-
-        if (isUIHitClosest || !raycastHit.HasValue) return;
-
-        GameObject hit = raycastHit.Value.collider?.gameObject;
-        if (hit == null) return;
-
-        // Walk up hierarchy until we find the Molecule-tagged root.
-        // FIX: old code always walked exactly 2 levels, causing it to overshoot
-        // past the molecule root when atoms were direct children (depth mismatch).
-        GameObject molecule = FindMoleculeRoot(hit);
-        if (molecule == null) return;
-
-        // Find the child whose name ends with ".cub" — the orbital surface.
-        // Order of .cub/.pdb children varies per prefab so we can't use GetChild(0).
-        Transform orbitalRoot = FindCubChild(molecule.transform);
-        if (orbitalRoot == null) return;
-
-        // Seed opacity from the actual material if we haven't tracked it yet.
-        if (!orbitalOpacities.ContainsKey(molecule))
-            orbitalOpacities[molecule] = ReadOpacity(orbitalRoot);
-
-        float next = Mathf.Clamp01(orbitalOpacities[molecule] + (increase ? opacityStep : -opacityStep));
-        orbitalOpacities[molecule] = next;
-
-        ApplyOpacity(orbitalRoot, next);
+            case "orb_up":
+            case "orb_down":
+                ApplyOpacityStep(option.id == "orb_up");
+                break;
+        }
     }
 
-    // Find the direct child of the molecule root whose name ends with ".cub".
-    private Transform FindCubChild(Transform moleculeRoot)
+    void ApplyOpacityStep(bool increase)
+    {
+        GameObject target = _lockedMolecule != null ? _lockedMolecule : GetAimedMolecule();
+        if (target == null) { Debug.Log("[OrbitalOpacity] No molecule targeted."); return; }
+
+        Transform cub = FindCubChild(target.transform);
+        if (cub == null) { Debug.Log("[OrbitalOpacity] No .cub child found."); return; }
+
+        if (!_opacities.ContainsKey(target))
+            _opacities[target] = ReadOpacity(cub);
+
+        float next = Mathf.Clamp01(_opacities[target] + (increase ? opacityStep : -opacityStep));
+        _opacities[target] = next;
+        ApplyOpacity(cub, next);
+        Debug.Log($"[OrbitalOpacity] {target.name} orbital opacity -> {next:F2}");
+    }
+
+    GameObject GetAimedMolecule()
+    {
+        if (rayInteractor == null) return null;
+        rayInteractor.TryGetCurrentRaycast(out RaycastHit? hit, out _, out _, out _, out bool isUI);
+        if (isUI || !hit.HasValue) return null;
+        GameObject obj = hit.Value.collider?.gameObject;
+        return obj == null ? null : FindMoleculeRoot(obj);
+    }
+
+    Transform FindCubChild(Transform moleculeRoot)
     {
         foreach (Transform child in moleculeRoot)
-        {
             if (child.name.EndsWith(".cub")) return child;
-        }
         return null;
     }
 
-    // Walk up the transform hierarchy looking for the first ancestor (or self)
-    // that has an XRGrabInteractable — that's the molecule root.
-    private GameObject FindMoleculeRoot(GameObject start)
+    GameObject FindMoleculeRoot(GameObject start)
     {
         Transform t = start.transform;
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 6; i++)
         {
-            if (t.GetComponent<UnityEngine.XR.Interaction.Toolkit.Interactables.XRGrabInteractable>() != null)
-                return t.gameObject;
+            if (t.GetComponent<XRGrabInteractable>() != null) return t.gameObject;
             if (t.parent == null) break;
             t = t.parent;
         }
         return null;
     }
 
-    // Read current alpha from the first renderer found under the orbital root.
-    private float ReadOpacity(Transform orbitalRoot)
+    float ReadOpacity(Transform orbitalRoot)
     {
         Renderer[] renderers = orbitalRoot.GetComponentsInChildren<Renderer>();
-        if (renderers.Length > 0)
-            return renderers[0].material.color.a;
-        return 1f;
+        return renderers.Length > 0 ? renderers[0].material.color.a : 1f;
     }
 
-    // Set alpha on every renderer under the orbital root.
-    // Uses renderer.material (instanced) so shared materials on other molecules
-    // are not affected.
-    private void ApplyOpacity(Transform orbitalRoot, float alpha)
+    void ApplyOpacity(Transform orbitalRoot, float alpha)
     {
-        Renderer[] renderers = orbitalRoot.GetComponentsInChildren<Renderer>();
-        foreach (Renderer r in renderers)
+        foreach (Renderer r in orbitalRoot.GetComponentsInChildren<Renderer>())
         {
-            // renderer.material auto-creates an instance for this object only
             Material mat = r.material;
             Color c = mat.color;
             c.a = alpha;
             mat.color = c;
 
-            // Keep Standard shader render mode consistent with current alpha.
-            // If fully opaque, restore Opaque mode; otherwise stay in Fade mode.
             if (alpha >= 1f)
             {
                 mat.SetFloat("_Mode", 0);
@@ -138,7 +120,7 @@ public class OrbitalOpacity : MonoBehaviour
             }
             else
             {
-                mat.SetFloat("_Mode", 2); // Fade
+                mat.SetFloat("_Mode", 2);
                 mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
                 mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
                 mat.SetInt("_ZWrite", 0);

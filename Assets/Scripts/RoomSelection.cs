@@ -1,9 +1,8 @@
 using UnityEngine;
 
-// Listens to the radial menu for room selection options and changes the
-// room's material color.
-// Option ids: "room_white", "room_black", "room_gray", "room_blue", "room_warm"
-// Assign the Renderer(s) of your room walls/floor to roomRenderers in the Inspector.
+// Handles Room Selection submenu options.
+// Assign the Renderer(s) of your room geometry to roomRenderers in the Inspector.
+// Option ids: room_white, room_black, room_gray, room_blue, room_warm
 public class RoomSelection : MonoBehaviour
 {
     public RadialMenuController radialMenuController;
@@ -39,10 +38,9 @@ public class RoomSelection : MonoBehaviour
 
         foreach (Renderer r in roomRenderers)
         {
-            if (r == null) continue;
-            r.material.color = color.Value;
+            if (r != null) r.material.color = color.Value;
         }
 
-        Debug.Log($"[RoomSelection] Room color set to {option.id}");
+        Debug.Log($"[RoomSelection] Room -> {option.id}");
     }
 }

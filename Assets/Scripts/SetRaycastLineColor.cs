@@ -1,20 +1,21 @@
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit.Interactors.Visuals;
 
+// Handles all Raycast Settings submenu options:
+//   ray_red / ray_blue / ray_green / ray_white  -> change line color
+//   ray_alpha_50 / ray_alpha_100                -> change line transparency
 public class SetRaycastLineColor : MonoBehaviour
 {
     public RadialMenuController radialMenuController;
     public LineRenderer lineRenderer;
     public XRInteractorLineVisual lineVisual;
 
-    private Gradient cachedGradient = new Gradient();
+    private Gradient _cachedGradient = new Gradient();
 
     void Start()
     {
-        if (radialMenuController == null) { Debug.LogError("[LineColor] radialMenuController not assigned!"); return; }
-        if (lineRenderer == null)         { Debug.LogError("[LineColor] lineRenderer not assigned!"); return; }
+        if (radialMenuController == null) { Debug.LogError("[RaycastLine] radialMenuController not assigned!"); return; }
         radialMenuController.onOptionConfirmed.AddListener(HandleOption);
-        Debug.Log("[LineColor] Listener registered");
     }
 
     void OnDestroy()
@@ -25,24 +26,64 @@ public class SetRaycastLineColor : MonoBehaviour
 
     void HandleOption(RadialMenuOption option)
     {
-        if (option.id == null || !option.id.StartsWith("ray_")) return;
-        ApplyColor(option.displayColor);
-        Debug.Log($"[LineColor] Color set to {option.displayColor} from option '{option.id}'");
+        // Color options
+        if (option.id.StartsWith("ray_") && !option.id.StartsWith("ray_alpha_"))
+        {
+            ApplyColor(option.displayColor);
+            Debug.Log($"[RaycastLine] Color -> {option.displayColor} ('{option.id}')");
+            return;
+        }
+
+        // Alpha options
+        float alpha = option.id switch
+        {
+            "ray_alpha_50"  => 0.50f,
+            "ray_alpha_100" => 1.00f,
+            _ => -1f
+        };
+
+        if (alpha >= 0f)
+        {
+            ApplyAlpha(alpha);
+            Debug.Log($"[RaycastLine] Alpha -> {alpha} ('{option.id}')");
+        }
     }
 
     void ApplyColor(Color c)
     {
-        lineRenderer.startColor = c;
-        lineRenderer.endColor = c;
+        if (lineRenderer != null)
+        {
+            lineRenderer.startColor = c;
+            lineRenderer.endColor   = c;
+        }
 
         if (lineVisual != null)
         {
-            cachedGradient.SetKeys(
+            _cachedGradient.SetKeys(
                 new GradientColorKey[] { new GradientColorKey(c, 0f), new GradientColorKey(c, 1f) },
                 new GradientAlphaKey[] { new GradientAlphaKey(c.a, 0f), new GradientAlphaKey(c.a, 1f) }
             );
-            lineVisual.validColorGradient = cachedGradient;
-            lineVisual.invalidColorGradient = cachedGradient;
+            lineVisual.validColorGradient   = _cachedGradient;
+            lineVisual.invalidColorGradient = _cachedGradient;
+        }
+    }
+
+    void ApplyAlpha(float alpha)
+    {
+        if (lineRenderer != null)
+        {
+            Color sc = lineRenderer.startColor; sc.a = alpha; lineRenderer.startColor = sc;
+            Color ec = lineRenderer.endColor;   ec.a = alpha; lineRenderer.endColor   = ec;
+        }
+
+        if (lineVisual != null)
+        {
+            GradientColorKey[] ck = lineVisual.validColorGradient.colorKeys;
+            GradientAlphaKey[] ak = lineVisual.validColorGradient.alphaKeys;
+            for (int i = 0; i < ak.Length; i++) ak[i].alpha = alpha;
+            _cachedGradient.SetKeys(ck, ak);
+            lineVisual.validColorGradient   = _cachedGradient;
+            lineVisual.invalidColorGradient = _cachedGradient;
         }
     }
 }
