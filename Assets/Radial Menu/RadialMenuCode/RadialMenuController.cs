@@ -24,6 +24,10 @@ public class RadialMenuController : MonoBehaviour
     public RadialMenuData currentMenu;
     public RadialMenuSelectionEvent onOptionConfirmed;
 
+    [Header("Mode Scripts")]
+    public DeleteMolecule deleteMolecule;
+    public MoleculeScale moleculeScale;
+
     private readonly List<GameObject> spawnedParts = new List<GameObject>();
     private readonly List<GameObject> spawnedImageParts = new List<GameObject>();
     private int currentSelectedIndex = -1;
@@ -77,6 +81,8 @@ public class RadialMenuController : MonoBehaviour
         }
 
         menuOpen = true;
+        deleteMolecule?.ExitDeleteMode();
+        moleculeScale?.ExitScaleMode();
         BuildMenu();
         radialPartCanvas.gameObject.SetActive(true);
         radialPartCanvas.position = handTransform.position;
@@ -150,6 +156,8 @@ public class RadialMenuController : MonoBehaviour
         uiText.color = labelColor;
         uiText.alignment = TextAnchor.MiddleCenter;
         uiText.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+        uiText.horizontalOverflow = HorizontalWrapMode.Overflow;
+        uiText.verticalOverflow = VerticalWrapMode.Overflow;
 
         spawnedParts.Add(labelObj);
     }

@@ -1,18 +1,15 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
-// Attach to the right-hand XR controller. Assign rayInteractor, scaleUpButton,
-// and scaleDownButton in the Inspector. Point the ray at a molecule and press
-// either button to scale it up or down.
 public class MoleculeScale : MonoBehaviour
 {
-    [SerializeField] private XRRayInteractor rayInteractor;
+    [SerializeField] private XRRayInteractor leftRayInteractor;
+    [SerializeField] private XRRayInteractor rightRayInteractor;
 
-    [Header("Buttons")]
-    public InputActionProperty scaleUpButton;
-    public InputActionProperty scaleDownButton;
+    [Header("Left Hand Buttons (A = scale up, B = scale down)")]
+    public InputActionProperty primaryButton;
+    public InputActionProperty secondaryButton;
 
     [Header("Settings")]
     [Range(0.05f, 0.5f)]
@@ -20,37 +17,52 @@ public class MoleculeScale : MonoBehaviour
     public float minScale = 0.1f;
     public float maxScale = 5f;
 
-    private void OnEnable()
+    [Header("Radial Menu")]
+    public RadialMenuController radialMenuController;
+    public ModeIndicator modeIndicator;
+
+    private bool scaleMode = false;
+
+    void Start()
     {
-        scaleUpButton.action.Enable();
-        scaleDownButton.action.Enable();
+        if (radialMenuController != null)
+            radialMenuController.onOptionConfirmed.AddListener(HandleOption);
     }
 
-    private void OnDisable()
+    void OnDestroy()
     {
-        scaleUpButton.action.Disable();
-        scaleDownButton.action.Disable();
+        if (radialMenuController != null)
+            radialMenuController.onOptionConfirmed.RemoveListener(HandleOption);
+    }
+
+    void HandleOption(RadialMenuOption option)
+    {
+        if (option.id == "scale_molecule")
+        {
+            scaleMode = true;
+            modeIndicator?.SetMode("Scale Mode");
+            Debug.Log("[MoleculeScale] Scale mode ON — point at a molecule and press A (up) or B (down).");
+        }
+    }
+
+    public void ExitScaleMode()
+    {
+        scaleMode = false;
+        modeIndicator?.ResetToNormal();
+        Debug.Log("[MoleculeScale] Scale mode OFF.");
     }
 
     private void Update()
     {
-        bool up   = scaleUpButton.action.WasPressedThisFrame();
-        bool down = scaleDownButton.action.WasPressedThisFrame();
+        if (!scaleMode) return;
+
+        bool up   = primaryButton.action != null && primaryButton.action.WasPressedThisFrame();
+        bool down = secondaryButton.action != null && secondaryButton.action.WasPressedThisFrame();
 
         if (!up && !down) return;
-        if (rayInteractor == null) return;
+        if (!TryGetRaycastHit(out RaycastHit raycastHit)) return;
 
-        rayInteractor.TryGetCurrentRaycast(
-            out RaycastHit? raycastHit,
-            out _,
-            out _,
-            out _,
-            out bool isUIHitClosest
-        );
-
-        if (isUIHitClosest || !raycastHit.HasValue) return;
-
-        GameObject hit = raycastHit.Value.collider?.gameObject;
+        GameObject hit = raycastHit.collider?.gameObject;
         if (hit == null) return;
 
         GameObject molecule = FindMoleculeRoot(hit);
@@ -61,8 +73,22 @@ public class MoleculeScale : MonoBehaviour
         molecule.transform.localScale = Vector3.one * next;
     }
 
-    // Walk up the transform hierarchy looking for the first ancestor (or self)
-    // that has an XRGrabInteractable — that's the molecule root.
+    private bool TryGetRaycastHit(out RaycastHit hit)
+    {
+        foreach (XRRayInteractor ray in new[] { leftRayInteractor, rightRayInteractor })
+        {
+            if (ray == null) continue;
+            ray.TryGetCurrentRaycast(out RaycastHit? raycastHit, out _, out _, out _, out bool isUIHit);
+            if (!isUIHit && raycastHit.HasValue)
+            {
+                hit = raycastHit.Value;
+                return true;
+            }
+        }
+        hit = default;
+        return false;
+    }
+
     private GameObject FindMoleculeRoot(GameObject start)
     {
         Transform t = start.transform;
