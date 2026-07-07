@@ -4,20 +4,14 @@ using UnityEngine.SceneManagement;
 
 public class LoadScene : MonoBehaviour
 {
-    [Header("Scene Loading Settings")]
-    [Tooltip("The name of the scene that will be loaded.")]
-    public string sceneName = "";
-    [Tooltip("The index of the scene that will be loaded.")]
-    public int sceneIndex = 0;
-
     // Loads scene by name
-    public void LoadSceneByName()
+    public static void LoadSceneByName(string sceneName)
     {
         SceneManager.LoadScene(sceneName);
     }
 
     // Loads scene by index
-    public void LoadSceneByIndex()
+    public static void LoadSceneByIndex(int sceneIndex)
     {
         SceneManager.LoadScene(sceneIndex);
     }
