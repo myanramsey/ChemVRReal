@@ -8,7 +8,8 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 // either button to step its orbital (.cub surface) opacity up or down.
 public class OrbitalOpacity : MonoBehaviour
 {
-    [SerializeField] private XRRayInteractor rayInteractor;
+    [SerializeField] private XRRayInteractor leftRayInteractor;
+    [SerializeField] private XRRayInteractor rightRayInteractor;
 
     [Header("Buttons")]
     public InputActionProperty increaseOpacityButton;
@@ -18,54 +19,70 @@ public class OrbitalOpacity : MonoBehaviour
     [Range(0.05f, 0.5f)]
     public float opacityStep = 0.1f;
 
-    // Per-molecule opacity tracking
+    [Header("Radial Menu")]
+    public RadialMenuController radialMenuController;
+    public ModeIndicator modeIndicator;
+
+    private bool opacityMode = false;
     private Dictionary<GameObject, float> orbitalOpacities = new Dictionary<GameObject, float>();
 
-    private void OnEnable()
+    void Start()
     {
-        increaseOpacityButton.action.Enable();
-        decreaseOpacityButton.action.Enable();
+        if (radialMenuController != null)
+            radialMenuController.onOptionConfirmed.AddListener(HandleOption);
+
+        increaseOpacityButton.action?.Enable();
+        decreaseOpacityButton.action?.Enable();
     }
 
-    private void OnDisable()
+    void OnDestroy()
     {
-        increaseOpacityButton.action.Disable();
-        decreaseOpacityButton.action.Disable();
+        if (radialMenuController != null)
+            radialMenuController.onOptionConfirmed.RemoveListener(HandleOption);
+    }
+
+    void HandleOption(RadialMenuOption option)
+    {
+        if (option.id == "opacity_molecule")
+        {
+            opacityMode = true;
+            modeIndicator?.SetMode("Opacity Mode");
+            Debug.Log("[OrbitalOpacity] Opacity mode ON — point at a molecule and press A (increase) or B (decrease).");
+        }
+    }
+
+    public void ExitOpacityMode()
+    {
+        opacityMode = false;
+        modeIndicator?.ResetToNormal();
     }
 
     private void Update()
     {
-        bool increase = increaseOpacityButton.action.WasPressedThisFrame();
-        bool decrease = decreaseOpacityButton.action.WasPressedThisFrame();
+        if (!opacityMode) return;
+
+        bool increase = increaseOpacityButton.action != null && increaseOpacityButton.action.WasPressedThisFrame();
+        bool decrease = decreaseOpacityButton.action != null && decreaseOpacityButton.action.WasPressedThisFrame();
 
         if (!increase && !decrease) return;
-        if (rayInteractor == null) return;
 
-        rayInteractor.TryGetCurrentRaycast(
-            out RaycastHit? raycastHit,
-            out _,
-            out _,
-            out _,
-            out bool isUIHitClosest
-        );
+        AdjustOpacity(increase);
+    }
 
-        if (isUIHitClosest || !raycastHit.HasValue) return;
+    // Called by Update (button press) or RaycastAlphaMenuOption (radial menu).
+    public void AdjustOpacity(bool increase)
+    {
+        if (!TryGetRaycastHit(out RaycastHit raycastHit)) return;
 
-        GameObject hit = raycastHit.Value.collider?.gameObject;
+        GameObject hit = raycastHit.collider?.gameObject;
         if (hit == null) return;
 
-        // Walk up hierarchy until we find the Molecule-tagged root.
-        // FIX: old code always walked exactly 2 levels, causing it to overshoot
-        // past the molecule root when atoms were direct children (depth mismatch).
         GameObject molecule = FindMoleculeRoot(hit);
         if (molecule == null) return;
 
-        // Find the child whose name ends with ".cub" — the orbital surface.
-        // Order of .cub/.pdb children varies per prefab so we can't use GetChild(0).
         Transform orbitalRoot = FindCubChild(molecule.transform);
         if (orbitalRoot == null) return;
 
-        // Seed opacity from the actual material if we haven't tracked it yet.
         if (!orbitalOpacities.ContainsKey(molecule))
             orbitalOpacities[molecule] = ReadOpacity(orbitalRoot);
 
@@ -83,6 +100,22 @@ public class OrbitalOpacity : MonoBehaviour
             if (child.name.EndsWith(".cub")) return child;
         }
         return null;
+    }
+
+    private bool TryGetRaycastHit(out RaycastHit hit)
+    {
+        foreach (XRRayInteractor ray in new[] { leftRayInteractor, rightRayInteractor })
+        {
+            if (ray == null) continue;
+            ray.TryGetCurrentRaycast(out RaycastHit? raycastHit, out _, out _, out _, out bool isUIHit);
+            if (!isUIHit && raycastHit.HasValue)
+            {
+                hit = raycastHit.Value;
+                return true;
+            }
+        }
+        hit = default;
+        return false;
     }
 
     // Walk up the transform hierarchy looking for the first ancestor (or self)

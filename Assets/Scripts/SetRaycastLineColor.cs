@@ -7,7 +7,12 @@ public class SetRaycastLineColor : MonoBehaviour
     public LineRenderer lineRenderer;
     public XRInteractorLineVisual lineVisual;
 
+    [Header("Alpha Settings")]
+    [Range(0.05f, 0.5f)]
+    public float alphaStep = 0.1f;
+
     private Gradient cachedGradient = new Gradient();
+    private Color currentColor = Color.white;
 
     void Start()
     {
@@ -25,9 +30,26 @@ public class SetRaycastLineColor : MonoBehaviour
 
     void HandleOption(RadialMenuOption option)
     {
-        if (option.id == null || !option.id.StartsWith("ray_")) return;
-        ApplyColor(option.displayColor);
-        Debug.Log($"[LineColor] Color set to {option.displayColor} from option '{option.id}'");
+        if (option.id == null) return;
+
+        if (option.id == "ray_alpha_increase")
+        {
+            currentColor.a = Mathf.Clamp01(currentColor.a + alphaStep);
+            ApplyColor(currentColor);
+            return;
+        }
+
+        if (option.id == "ray_alpha_decrease")
+        {
+            currentColor.a = Mathf.Clamp01(currentColor.a - alphaStep);
+            ApplyColor(currentColor);
+            return;
+        }
+
+        if (!option.id.StartsWith("ray_")) return;
+        currentColor = option.displayColor;
+        ApplyColor(currentColor);
+        Debug.Log($"[LineColor] Color set to {currentColor} from option '{option.id}'");
     }
 
     void ApplyColor(Color c)
