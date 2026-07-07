@@ -17,7 +17,7 @@ public class RadialMenuController : MonoBehaviour
 
     [Header("Label Settings")]
     public float labelRadius = 80f;
-    public int labelFontSize = 18;
+    public int labelFontSize = 12;
     public Color labelColor = Color.white;
 
     [Header("State")]
@@ -27,6 +27,8 @@ public class RadialMenuController : MonoBehaviour
     [Header("Mode Scripts")]
     public DeleteMolecule deleteMolecule;
     public MoleculeScale moleculeScale;
+    public OrbitalOpacity orbitalOpacity;
+    public ToggleBackboneOrbital toggleBackboneOrbital;
 
     private readonly List<GameObject> spawnedParts = new List<GameObject>();
     private readonly List<GameObject> spawnedImageParts = new List<GameObject>();
@@ -83,6 +85,8 @@ public class RadialMenuController : MonoBehaviour
         menuOpen = true;
         deleteMolecule?.ExitDeleteMode();
         moleculeScale?.ExitScaleMode();
+        orbitalOpacity?.ExitOpacityMode();
+        toggleBackboneOrbital?.ExitToggleMode();
         BuildMenu();
         radialPartCanvas.gameObject.SetActive(true);
         radialPartCanvas.position = handTransform.position;
@@ -148,7 +152,7 @@ public class RadialMenuController : MonoBehaviour
 
         RectTransform rt = labelObj.AddComponent<RectTransform>();
         rt.anchoredPosition = new Vector2(labelX, labelY);
-        rt.sizeDelta = new Vector2(100f, 40f);
+        rt.sizeDelta = new Vector2(60f, 80f);
 
         Text uiText = labelObj.AddComponent<Text>();
         uiText.text = text;
@@ -156,7 +160,7 @@ public class RadialMenuController : MonoBehaviour
         uiText.color = labelColor;
         uiText.alignment = TextAnchor.MiddleCenter;
         uiText.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-        uiText.horizontalOverflow = HorizontalWrapMode.Overflow;
+        uiText.horizontalOverflow = HorizontalWrapMode.Wrap;
         uiText.verticalOverflow = VerticalWrapMode.Overflow;
 
         spawnedParts.Add(labelObj);

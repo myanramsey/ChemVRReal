@@ -14,27 +14,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RadialMenuData
   menuName: Main Menu
   options:
-  - id: raycast_colors
-    displayText: Raycast Color
-    displayColor: {r: 0.41509432, g: 0.41509432, b: 0.41509432, a: 1}
-    subMenu: {fileID: 11400000, guid: 9f8c00db22e7b4473ab65bc5854182ae, type: 2}
-  - id: room_colors
-    displayText: Room Colors
-    displayColor: {r: 0.5377358, g: 0.5377358, b: 0.5377358, a: 1}
-    subMenu: {fileID: 0}
-  - id: option3
-    displayText: Option3
+  - id: add_molecule
+    displayText: Add Molecule
     displayColor: {r: 0.41509432, g: 0.41509432, b: 0.41509432, a: 1}
     subMenu: {fileID: 0}
-  - id: option4
-    displayText: Option4
+  - id: delete_molecule
+    displayText: Delete Molecule
+    displayColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    subMenu: {fileID: 0}
+  - id: scale_molecule
+    displayText: Scale Molecule
     displayColor: {r: 0.5283019, g: 0.5283019, b: 0.5283019, a: 1}
     subMenu: {fileID: 0}
-  - id: option5
-    displayText: Option5
-    displayColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    subMenu: {fileID: 11400000, guid: 9f8c00db22e7b4473ab65bc5854182ae, type: 2}
-  - id: option6
-    displayText: Option6
-    displayColor: {r: 1, g: 1, b: 1, a: 1}
+  - id: opacity_molecule
+    displayText: Opacity Molecule
+    displayColor: {r: 0.5283019, g: 0.5283019, b: 0.5283019, a: 1}
+    subMenu: {fileID: 0}
+  - id: toggle_backbone_orbital
+    displayText: Toggle
+    displayColor: {r: 0.41509432, g: 0.41509432, b: 0.41509432, a: 1}
+    subMenu: {fileID: 0}
+  - id: raycast_colors
+    displayText: Raycast Settings
+    displayColor: {r: 0.41509432, g: 0.41509432, b: 0.41509432, a: 1}
     subMenu: {fileID: 11400000, guid: 9f8c00db22e7b4473ab65bc5854182ae, type: 2}

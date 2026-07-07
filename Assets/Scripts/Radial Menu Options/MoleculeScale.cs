@@ -27,6 +27,9 @@ public class MoleculeScale : MonoBehaviour
     {
         if (radialMenuController != null)
             radialMenuController.onOptionConfirmed.AddListener(HandleOption);
+
+        primaryButton.action?.Enable();
+        secondaryButton.action?.Enable();
     }
 
     void OnDestroy()

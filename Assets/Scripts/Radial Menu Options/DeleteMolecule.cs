@@ -21,6 +21,9 @@ public class DeleteMolecule : MonoBehaviour
     {
         if (radialMenuController != null)
             radialMenuController.onOptionConfirmed.AddListener(HandleOption);
+
+        primaryButton.action?.Enable();
+        secondaryButton.action?.Enable();
     }
 
     void OnDestroy()
@@ -49,13 +52,20 @@ public class DeleteMolecule : MonoBehaviour
 
         if (!pressed) return;
 
-        // Try whichever ray interactor has an active hit.
-        if (!TryGetRaycastHit(out RaycastHit raycastHit)) return;
+        Debug.Log("[DeleteMolecule] Button pressed in delete mode — checking raycast...");
+
+        if (!TryGetRaycastHit(out RaycastHit raycastHit))
+        {
+            Debug.Log("[DeleteMolecule] No raycast hit found.");
+            return;
+        }
 
         GameObject hit = raycastHit.collider?.gameObject;
+        Debug.Log($"[DeleteMolecule] Ray hit: {hit?.name} | tag: {hit?.tag}");
         if (hit == null) return;
 
         GameObject molecule = FindMoleculeRoot(hit);
+        Debug.Log($"[DeleteMolecule] Molecule root found: {molecule?.name ?? "NULL"}");
         if (molecule == null) return;
 
         Destroy(molecule);
@@ -94,7 +104,8 @@ public class DeleteMolecule : MonoBehaviour
         Transform t = start.transform;
         for (int i = 0; i < 5; i++)
         {
-            if (t.CompareTag("Molecule")) return t.gameObject;
+            if (t.GetComponent<UnityEngine.XR.Interaction.Toolkit.Interactables.XRGrabInteractable>() != null)
+                return t.gameObject;
             if (t.parent == null) break;
             t = t.parent;
         }
