@@ -18,6 +18,22 @@ MonoBehaviour:
     displayText: Red
     displayColor: {r: 1, g: 0, b: 0, a: 1}
     subMenu: {fileID: 0}
+  - id: ray_blue
+    displayText: Blue
+    displayColor: {r: 0, g: 0, b: 1, a: 1}
+    subMenu: {fileID: 0}
+  - id: ray_green
+    displayText: Green
+    displayColor: {r: 0, g: 1, b: 0, a: 1}
+    subMenu: {fileID: 0}
+  - id: ray_alpha_increase
+    displayText: Opacity +
+    displayColor: {r: 1, g: 1, b: 1, a: 1}
+    subMenu: {fileID: 0}
+  - id: ray_alpha_decrease
+    displayText: Opacity -
+    displayColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    subMenu: {fileID: 0}
   - id: back
     displayText: Back
     displayColor: {r: 0.38355476, g: 1, b: 0, a: 1}
