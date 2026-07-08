@@ -977,8 +977,13 @@ GameObject:
   - component: {fileID: 89705654}
   - component: {fileID: 89705655}
   - component: {fileID: 89705656}
-  - component: {fileID: 89705657}
   - component: {fileID: 89705658}
+  - component: {fileID: 89705657}
+  - component: {fileID: 89705659}
+  - component: {fileID: 89705660}
+  - component: {fileID: 89705662}
+  - component: {fileID: 89705661}
+  - component: {fileID: 89705663}
   m_Layer: 0
   m_Name: RightHand
   m_TagString: Untagged
@@ -1101,50 +1106,53 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67057c4f895d749198fde804c0e4fb3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MoleculeScale
-  rayInteractor: {fileID: 1590294730}
-  scaleUpButton:
+  leftRayInteractor: {fileID: 343356257}
+  rightRayInteractor: {fileID: 1590294730}
+  primaryButton:
     m_UseReference: 0
     m_Action:
-      m_Name: Scale Up Button
+      m_Name: Primary Button
       m_Type: 0
       m_ExpectedControlType: 
-      m_Id: c078ccfe-6435-4ca8-8da7-c3b82259e000
+      m_Id: 7079813d-1b39-4d13-9468-03e5978c0543
       m_Processors: 
       m_Interactions: 
       m_SingletonActionBindings:
       - m_Name: 
-        m_Id: 4affe1d0-e82f-4e78-92ba-49287d1a7774
-        m_Path: <XRController>{RightHand}/{SecondaryButton}
+        m_Id: 84486075-f7e9-4813-b9b8-3528da51083b
+        m_Path: <XRController>{LeftHand}/{PrimaryButton}
         m_Interactions: 
         m_Processors: 
         m_Groups: 
-        m_Action: Scale Up Button
+        m_Action: Primary Button
         m_Flags: 0
       m_Flags: 0
     m_Reference: {fileID: 0}
-  scaleDownButton:
+  secondaryButton:
     m_UseReference: 0
     m_Action:
-      m_Name: Scale Down Button
+      m_Name: Secondary Button
       m_Type: 0
       m_ExpectedControlType: 
-      m_Id: 0cbdd52b-08eb-471b-b514-0ca44f157579
+      m_Id: af757b0a-12e6-4e39-a4e7-b20787b2f8cc
       m_Processors: 
       m_Interactions: 
       m_SingletonActionBindings:
       - m_Name: 
-        m_Id: 7b96d1c8-e85b-41b7-9e18-87e640322360
-        m_Path: <XRController>{RightHand}/{PrimaryButton}
+        m_Id: f7d809b5-7431-4953-9303-7ba922ae422e
+        m_Path: <XRController>{LeftHand}/{SecondaryButton}
         m_Interactions: 
         m_Processors: 
         m_Groups: 
-        m_Action: Scale Down Button
+        m_Action: Secondary Button
         m_Flags: 0
       m_Flags: 0
     m_Reference: {fileID: 0}
   scaleStep: 0.1
   minScale: 0.1
   maxScale: 5
+  radialMenuController: {fileID: 2139456859}
+  modeIndicator: {fileID: 1142504804}
 --- !u!114 &89705658
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1160,6 +1168,242 @@ MonoBehaviour:
   radialMenuController: {fileID: 2139456859}
   lineRenderer: {fileID: 1590294734}
   lineVisual: {fileID: 1590294737}
+  alphaStep: 0.1
+--- !u!114 &89705659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 89705653}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 406b8022363047843aceeaae91fd870a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DeleteMolecule
+  leftRayInteractor: {fileID: 343356257}
+  rightRayInteractor: {fileID: 1590294730}
+  primaryButton:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Primary Button
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: b02180ab-3038-4fd5-ba2a-c898e9ed41ab
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings:
+      - m_Name: 
+        m_Id: cc1f90be-5319-41d0-a839-764f634adfc7
+        m_Path: <XRController>{LeftHand}/{PrimaryButton}
+        m_Interactions: 
+        m_Processors: 
+        m_Groups: 
+        m_Action: Primary Button
+        m_Flags: 0
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+  secondaryButton:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Secondary Button
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 823924e1-0ac7-4688-b845-1895fa24e929
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings:
+      - m_Name: 
+        m_Id: 97e99776-63df-41a0-a428-43b86444d227
+        m_Path: <XRController>{LeftHand}/{SecondaryButton}
+        m_Interactions: 
+        m_Processors: 
+        m_Groups: 
+        m_Action: Secondary Button
+        m_Flags: 0
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+  radialMenuController: {fileID: 2139456859}
+  modeIndicator: {fileID: 1142504804}
+--- !u!114 &89705660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 89705653}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a89f3bf05fffb4ce1b8a08b8ba746879, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::OrbitalOpacity
+  leftRayInteractor: {fileID: 343356257}
+  rightRayInteractor: {fileID: 1590294730}
+  increaseOpacityButton:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Increase Opacity Button
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 68503c5f-0ab6-40aa-a2f4-83c3f6274e11
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings:
+      - m_Name: 
+        m_Id: 0c561735-3a81-47a5-8d1c-dfb375a06b6e
+        m_Path: <XRController>{LeftHand}/{PrimaryButton}
+        m_Interactions: 
+        m_Processors: 
+        m_Groups: 
+        m_Action: Increase Opacity Button
+        m_Flags: 0
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+  decreaseOpacityButton:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Decrease Opacity Button
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 9b4e56f2-ddad-47ec-bf0d-0508555cf506
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings:
+      - m_Name: 
+        m_Id: 21e6504c-9467-47cc-852d-9efeebf8e9a3
+        m_Path: <XRController>{LeftHand}/{SecondaryButton}
+        m_Interactions: 
+        m_Processors: 
+        m_Groups: 
+        m_Action: Decrease Opacity Button
+        m_Flags: 0
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+  opacityStep: 0.1
+  radialMenuController: {fileID: 2139456859}
+  modeIndicator: {fileID: 1142504804}
+--- !u!114 &89705661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 89705653}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dea477c27562fd94ab3a7f0334a0459f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ToggleOrbitals
+  rayInteractor: {fileID: 343356257}
+  primaryButton:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Primary Button
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 4f1d17b7-c6a3-4587-9403-d4c18884d1e1
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings:
+      - m_Name: 
+        m_Id: 300a8823-1be6-478b-94ea-d93c6e948bb9
+        m_Path: <XRController>{LeftHand}/{PrimaryButton}
+        m_Interactions: 
+        m_Processors: 
+        m_Groups: 
+        m_Action: Primary Button
+        m_Flags: 0
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+--- !u!114 &89705662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 89705653}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f8782393c7915a419023d70467ab1a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ToggleBackbone
+  rayInteractor: {fileID: 343356257}
+  primaryButton:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Primary Button
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: cc64545f-e2c5-4125-b11c-3129a23535be
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings:
+      - m_Name: 
+        m_Id: 39a109e4-5c3e-4ff7-882f-74e91000cbdd
+        m_Path: <XRController>{LeftHand}/{PrimaryButton}
+        m_Interactions: 
+        m_Processors: 
+        m_Groups: 
+        m_Action: Primary Button
+        m_Flags: 0
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+--- !u!114 &89705663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 89705653}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6a45565a2c0140779f0dd9d90043b31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ToggleBackboneOrbital
+  leftRayInteractor: {fileID: 343356257}
+  rightRayInteractor: {fileID: 1590294730}
+  primaryButton:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Primary Button
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 92c62d66-cb84-4382-a6c4-0c3065294416
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings:
+      - m_Name: 
+        m_Id: e3eeb54c-b83b-4364-8e5f-d721d6dd6c48
+        m_Path: <XRController>{LeftHand}/{PrimaryButton}
+        m_Interactions: 
+        m_Processors: 
+        m_Groups: 
+        m_Action: Primary Button
+        m_Flags: 0
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+  secondaryButton:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Secondary Button
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: f39630e8-1287-440a-bc51-d42b620c73ad
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings:
+      - m_Name: 
+        m_Id: 8ae61250-2d0c-49e2-8932-9e75bba37869
+        m_Path: <XRController>{LeftHand}/{SecondaryButton}
+        m_Interactions: 
+        m_Processors: 
+        m_Groups: 
+        m_Action: Secondary Button
+        m_Flags: 0
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+  radialMenuController: {fileID: 2139456859}
+  modeIndicator: {fileID: 1142504804}
 --- !u!1 &93400195
 GameObject:
   m_ObjectHideFlags: 0
@@ -5627,8 +5871,6 @@ GameObject:
   - component: {fileID: 835399591}
   - component: {fileID: 835399592}
   - component: {fileID: 835399593}
-  - component: {fileID: 835399594}
-  - component: {fileID: 835399595}
   - component: {fileID: 835399597}
   - component: {fileID: 835399596}
   m_Layer: 0
@@ -5656,6 +5898,7 @@ Transform:
   - {fileID: 1288172252}
   - {fileID: 511531721}
   - {fileID: 1288200841}
+  - {fileID: 1142504803}
   m_Father: {fileID: 1419543983}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &835399591
@@ -5748,12 +5991,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 835399589}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a89f3bf05fffb4ce1b8a08b8ba746879, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OrbitalOpacity
-  rayInteractor: {fileID: 343356257}
+  leftRayInteractor: {fileID: 0}
+  rightRayInteractor: {fileID: 0}
   increaseOpacityButton:
     m_UseReference: 0
     m_Action:
@@ -5795,72 +6039,8 @@ MonoBehaviour:
       m_Flags: 0
     m_Reference: {fileID: 0}
   opacityStep: 0.1
---- !u!114 &835399594
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 835399589}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dea477c27562fd94ab3a7f0334a0459f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ToggleOrbitals
-  rayInteractor: {fileID: 343356257}
-  primaryButton:
-    m_UseReference: 0
-    m_Action:
-      m_Name: Primary Button
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: 4f1d17b7-c6a3-4587-9403-d4c18884d1e1
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings:
-      - m_Name: 
-        m_Id: 300a8823-1be6-478b-94ea-d93c6e948bb9
-        m_Path: <XRController>{LeftHand}/{PrimaryButton}
-        m_Interactions: 
-        m_Processors: 
-        m_Groups: 
-        m_Action: Primary Button
-        m_Flags: 0
-      m_Flags: 0
-    m_Reference: {fileID: 0}
---- !u!114 &835399595
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 835399589}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f8782393c7915a419023d70467ab1a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ToggleBackbone
-  rayInteractor: {fileID: 343356257}
-  primaryButton:
-    m_UseReference: 0
-    m_Action:
-      m_Name: Primary Button
-      m_Type: 0
-      m_ExpectedControlType: 
-      m_Id: cc64545f-e2c5-4125-b11c-3129a23535be
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings:
-      - m_Name: 
-        m_Id: 39a109e4-5c3e-4ff7-882f-74e91000cbdd
-        m_Path: <XRController>{LeftHand}/{PrimaryButton}
-        m_Interactions: 
-        m_Processors: 
-        m_Groups: 
-        m_Action: Primary Button
-        m_Flags: 0
-      m_Flags: 0
-    m_Reference: {fileID: 0}
+  radialMenuController: {fileID: 0}
+  modeIndicator: {fileID: 0}
 --- !u!114 &835399596
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5906,7 +6086,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 406b8022363047843aceeaae91fd870a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DeleteMolecule
-  rayInteractor: {fileID: 343356257}
+  leftRayInteractor: {fileID: 0}
+  rightRayInteractor: {fileID: 0}
   primaryButton:
     m_UseReference: 0
     m_Action:
@@ -5927,6 +6108,20 @@ MonoBehaviour:
         m_Flags: 0
       m_Flags: 0
     m_Reference: {fileID: 0}
+  secondaryButton:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Secondary Button
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: ad4319ba-b06f-4480-a3ed-ea14fc1a928f
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+  radialMenuController: {fileID: 0}
+  modeIndicator: {fileID: 0}
 --- !u!1 &838573025
 GameObject:
   m_ObjectHideFlags: 0
@@ -7036,7 +7231,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28bc0684d997c894e987b8f2bfb80f19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PullPanel
-  vrPlayer: {fileID: 1419543983}
+  xrOrigin: {fileID: 0}
   rayInteractor: {fileID: 1590294730}
   gripButton:
     m_UseReference: 0
@@ -7917,6 +8112,263 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1085602391}
   m_CullTransparentMesh: 1
+--- !u!1 &1141015675
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1141015676}
+  - component: {fileID: 1141015678}
+  - component: {fileID: 1141015677}
+  m_Layer: 5
+  m_Name: Text (TMP)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1141015676
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1141015675}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1142504803}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 200, y: 50}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1141015677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1141015675}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: New Text
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 36
+  m_fontSizeBase: 36
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 1
+  m_VerticalAlignment: 256
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_characterHorizontalScale: 1
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &1141015678
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1141015675}
+  m_CullTransparentMesh: 1
+--- !u!1 &1142504802
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1142504803}
+  - component: {fileID: 1142504807}
+  - component: {fileID: 1142504806}
+  - component: {fileID: 1142504805}
+  - component: {fileID: 1142504804}
+  m_Layer: 5
+  m_Name: 'Mode '
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1142504803
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1142504802}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.001, y: 0.001, z: 0.001}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1141015676}
+  m_Father: {fileID: 835399590}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0.12}
+  m_SizeDelta: {x: 0.2, y: 0.8}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1142504804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1142504802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 604a74f84178646b0b1588313fca160b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ModeIndicator
+  modeText: {fileID: 1141015677}
+  radialMenuController: {fileID: 2139456859}
+  fontSize: 24
+  textColor: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &1142504805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1142504802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.GraphicRaycaster
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+--- !u!114 &1142504806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1142504802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.CanvasScaler
+  m_UiScaleMode: 0
+  m_ReferencePixelsPerUnit: 100
+  m_ScaleFactor: 1
+  m_ReferenceResolution: {x: 800, y: 600}
+  m_ScreenMatchMode: 0
+  m_MatchWidthOrHeight: 0
+  m_PhysicalUnit: 3
+  m_FallbackScreenDPI: 96
+  m_DefaultSpriteDPI: 96
+  m_DynamicPixelsPerUnit: 1
+  m_PresetInfoIsWorld: 1
+--- !u!223 &1142504807
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1142504802}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_UseReflectionProbes: 0
+  m_AdditionalShaderChannelsFlag: 25
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
 --- !u!1 &1178452724
 GameObject:
   m_ObjectHideFlags: 0
@@ -10949,7 +11401,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1787346994484839025, guid: ad818c36731146e994540a1896ad8f24, type: 3}
       propertyPath: m_Name
-      value: Ray Interactor
+      value: Left Ray Interactor
       objectReference: {fileID: 0}
     - target: {fileID: 5888765399538998960, guid: ad818c36731146e994540a1896ad8f24, type: 3}
       propertyPath: m_LocalPosition.x
@@ -13200,7 +13652,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.001, y: 0.001, z: 0.001}
+  m_LocalScale: {x: 0.0015, y: 0.0015, z: 0.001}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 414193440}
@@ -13276,6 +13728,9 @@ MonoBehaviour:
   radialPartCanvas: {fileID: 414193440}
   handTransform: {fileID: 89705654}
   angleBetweenRadialParts: 5
+  labelRadius: 80
+  labelFontSize: 10
+  labelColor: {r: 1, g: 1, b: 1, a: 1}
   currentMenu: {fileID: 11400000, guid: 3776c5c69ccdd4f6a9e5a1aef6d6ed56, type: 2}
   onOptionConfirmed:
     m_PersistentCalls:
@@ -13292,6 +13747,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  deleteMolecule: {fileID: 89705659}
+  moleculeScale: {fileID: 89705657}
+  orbitalOpacity: {fileID: 89705660}
+  toggleBackboneOrbital: {fileID: 0}
 --- !u!114 &2139456860
 MonoBehaviour:
   m_ObjectHideFlags: 0
