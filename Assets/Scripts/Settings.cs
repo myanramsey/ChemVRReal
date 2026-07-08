@@ -38,9 +38,9 @@ public class Settings : MonoBehaviour
         wallField.text = wallSlider.value.ToString();
 
         // Update the color of all the walls
-        Color wallColor = wallColors[(int)wallSlider.value - 1];
-
-        for (int i = 0; i < wallColors.Length; i++)
+        Color wallColor = wallColors[(int)(wallSlider.value - 1)];
+        
+        for (int i = 0; i < walls.Length; i++)
         {
             walls[i].material.color = wallColor;
         }
@@ -52,7 +52,7 @@ public class Settings : MonoBehaviour
         floorField.text = floorSlider.value.ToString();
 
         // Update the color of the floor
-        Color floorColor = floorColors[(int)floorSlider.value - 1];
+        Color floorColor = floorColors[(int)(floorSlider.value - 1)];
 
         floor.material.color = floorColor;
     }

@@ -6,8 +6,10 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 public class MovePanel : MonoBehaviour
 {
     [SerializeField] private XROrigin xrOrigin;
-    [SerializeField] private XRRayInteractor rayInteractor;
-    [SerializeField] private InputActionProperty gripButton;
+    [SerializeField] private XRRayInteractor leftRayInteractor;
+    [SerializeField] private XRRayInteractor rightRayInteractor;
+    [SerializeField] private InputActionProperty leftGripButton;
+    [SerializeField] private InputActionProperty rightGripButton;
 
     [Header("Movement Settings")]
     [Tooltip("The distance from the player the UI panel will be when fully pulled.")]
@@ -29,12 +31,14 @@ public class MovePanel : MonoBehaviour
 
     private void OnEnable()
     {
-        gripButton.action.Enable();
+        leftGripButton.action.Enable();
+        rightGripButton.action.Enable();
     }
 
     private void OnDisable()
     {
-        gripButton.action.Disable();
+        leftGripButton.action.Disable();
+        rightGripButton.action.Disable();
     }
 
     private void Start()
@@ -75,28 +79,28 @@ public class MovePanel : MonoBehaviour
 
     private void Update()
     {
-        if (!gripButton.action.IsPressed())
+        XRRayInteractor activeRay = null;
+        if (leftGripButton.action.IsPressed())
+        {
+            activeRay = leftRayInteractor;
+        }
+        else if (rightGripButton.action.IsPressed())
+        { 
+            activeRay = rightRayInteractor;
+        }
+
+        if (activeRay == null)
         {
             DisablePullOrDrag();
             return;
         }
 
-        if (!rayInteractor) return;
-        
-        rayInteractor.TryGetCurrentRaycast(
-            out RaycastHit? raycastHit,
-            out _,
-            out _,
-            out _,
-            out bool isUIHitClosest
-        );
+        if (!TryGetRaycastHit(activeRay, out RaycastHit raycastHit)) return;
 
         if (!isDragging)
         {
-            if (isUIHitClosest || !raycastHit.HasValue) return;
-
             // Check to see if the hit GameObject is this GameObject
-            GameObject hit = raycastHit.Value.collider?.gameObject;
+            GameObject hit = raycastHit.collider?.gameObject;
             if (hit != gameObject) return;
         }
 
@@ -111,8 +115,21 @@ public class MovePanel : MonoBehaviour
         }
         else if (isDragging)
         {
-            DragPanel(raycastHit.Value);
+            DragPanel(activeRay, raycastHit);
         }
+    }
+
+    private bool TryGetRaycastHit(XRRayInteractor ray, out RaycastHit hit)
+    {
+        ray.TryGetCurrentRaycast(out RaycastHit? raycastHit, out _, out _, out _, out bool isUIHit);
+        if (!isUIHit && raycastHit.HasValue)
+        {
+            hit = raycastHit.Value;
+            return true;
+        }
+
+        hit = default;
+        return false;
     }
 
     // Pulls UI panel from a distance towards player and facing player 
@@ -129,9 +146,9 @@ public class MovePanel : MonoBehaviour
     }
 
     // Drags UI panel around with player and facing player
-    private void DragPanel(RaycastHit raycastHit)
+    private void DragPanel(XRRayInteractor activeRay, RaycastHit raycastHit)
     {
-        Ray ray = new Ray(rayInteractor.transform.position, rayInteractor.transform.forward);
+        Ray ray = new Ray(activeRay.transform.position, activeRay.transform.forward);
         if (distance == -1.0f)
         {
             distance = raycastHit.distance;

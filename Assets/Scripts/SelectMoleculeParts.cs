@@ -5,7 +5,7 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 public class SelectMoleculeParts : MonoBehaviour
 {
     [SerializeField] private XRRayInteractor rayInteractor;
-    [SerializeField] private InputActionProperty primaryButton;
+    [SerializeField] private InputActionProperty button;
 
     [SerializeField] private GameObject colorPickerMenu;
 
@@ -24,18 +24,18 @@ public class SelectMoleculeParts : MonoBehaviour
 
     private void OnEnable()
     {
-        primaryButton.action.Enable();
+        button.action.Enable();
     }
 
     private void OnDisable()
     {
-        primaryButton.action.Disable();
+        button.action.Disable();
     }
 
     private void Update()
     {
         if (!scm.GetIsOpen()) return;
-        if (!primaryButton.action.WasPressedThisFrame()) return;
+        if (!button.action.WasPressedThisFrame()) return;
         if (rayInteractor == null) return;
 
         rayInteractor.TryGetCurrentRaycast(
