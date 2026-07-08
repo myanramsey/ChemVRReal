@@ -7,7 +7,7 @@ public class SpawnColorMenu : MonoBehaviour
 {
     [SerializeField] private XROrigin xrOrigin;
     [SerializeField] private XRRayInteractor rayInteractor;
-    [SerializeField] private InputActionProperty primaryButton;
+    [SerializeField] private InputActionProperty button;
 
     [SerializeField] private GameObject colorPickerMenu;
 
@@ -30,19 +30,18 @@ public class SpawnColorMenu : MonoBehaviour
 
     private void OnEnable()
     {
-        primaryButton.action.Enable();
+        button.action.Enable();
     }
 
     private void OnDisable()
     {
-        primaryButton.action.Disable();
+        button.action.Disable();
     }
 
     private void Update()
     {
         if (isOpen) return;
-        if (!primaryButton.action.WasPressedThisFrame()) return;
-        if (rayInteractor == null) return;
+        if (!button.action.WasPressedThisFrame()) return;
 
         rayInteractor.TryGetCurrentRaycast(
             out RaycastHit? raycastHit,
