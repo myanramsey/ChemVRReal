@@ -19,9 +19,9 @@ public class SaveSystem : MonoBehaviour
         public List<Vector3> scales;
 
         // Color info
-        public List<List<Color>> orbitalColors;
-        public List<List<Color>> atomColors;
-        public List<List<Color>> atomVertexColors;
+        public List<Color> orbitalColors;
+        public List<Color> atomColors;
+        public List<Color> atomVertexColors;
     }
 
     private SaveData saveData = new SaveData();
@@ -43,17 +43,17 @@ public class SaveSystem : MonoBehaviour
     {
         // Initialize lists
         saveData.names = new List<string>();
-        saveData.positions= new List<Vector3>();
+        saveData.positions = new List<Vector3>();
         saveData.rotations = new List<Vector3>();
         saveData.scales = new List<Vector3>();
-        saveData.orbitalColors = new List<List<Color>>();
-        saveData.atomColors = new List<List<Color>>();
-        saveData.atomVertexColors = new List<List<Color>>();
+        saveData.orbitalColors = new List<Color>();
+        saveData.atomColors = new List<Color>();
+        saveData.atomVertexColors = new List<Color>();
 
         GameObject[] molecules = GameObject.FindGameObjectsWithTag("Molecule");
         saveData.numMolecules = molecules.Length;
 
-        for (int i = 0; i < molecules.Length; i++) 
+        for (int i = 0; i < molecules.Length; i++)
         {
             saveData.names.Add(molecules[i].name);
 
@@ -62,28 +62,21 @@ public class SaveSystem : MonoBehaviour
             saveData.rotations.Add(new Vector3(molecules[i].transform.rotation.eulerAngles.x, molecules[i].transform.rotation.eulerAngles.y, molecules[i].transform.rotation.eulerAngles.z));
             saveData.scales.Add(molecules[i].transform.localScale);
 
-            // Save colors
-            List<Color> colors = new List<Color>();
-
             // Save orbital colors
             for (int j = 0; j < molecules[i].transform.GetChild(0).childCount; j++)
             {
                 GameObject orbital = molecules[i].transform.GetChild(0).GetChild(j).gameObject;
                 Color orbitalColor = orbital.GetComponent<MeshRenderer>().material.color;
-                colors.Add(orbitalColor);
+                saveData.orbitalColors.Add(orbitalColor);
             }
-            saveData.orbitalColors.Add(colors);
-            colors.Clear();
 
             // Save atom/bond colors
             for (int j = 0; j < molecules[i].transform.GetChild(1).childCount; j++)
             {
                 GameObject atom = molecules[i].transform.GetChild(1).GetChild(j).gameObject;
                 Color atomColor = atom.GetComponent<MeshRenderer>().material.color;
-                colors.Add(atomColor);
+                saveData.atomColors.Add(atomColor);
             }
-            saveData.atomColors.Add(colors);
-            colors.Clear();
 
             // Save atom/bond vertex colors
             for (int j = 0; j < molecules[i].transform.GetChild(1).childCount; j++)
@@ -93,10 +86,8 @@ public class SaveSystem : MonoBehaviour
                 Mesh mesh = atom.GetComponent<MeshFilter>().mesh;
                 Color[] meshColors = mesh.colors;
                 Color meshColor = meshColors[0];
-                colors.Add(meshColor);
+                saveData.atomVertexColors.Add(meshColor);
             }
-            saveData.atomVertexColors.Add(colors);
-            colors.Clear();
         }
     }
 
@@ -143,7 +134,8 @@ public class SaveSystem : MonoBehaviour
             for (int j = 0; j < moleculeInstance.transform.GetChild(0).childCount; j++)
             {
                 GameObject orbital = moleculeInstance.transform.GetChild(0).GetChild(j).gameObject;
-                orbital.GetComponent<MeshRenderer>().material.color = saveData.orbitalColors[i][j];
+                orbital.GetComponent<MeshRenderer>().material.color = saveData.orbitalColors[0];
+                saveData.orbitalColors.RemoveAt(0);
             }
 
             // Atoms and Bonds
@@ -151,16 +143,18 @@ public class SaveSystem : MonoBehaviour
             {
                 // Reset material color
                 GameObject atom = moleculeInstance.transform.GetChild(1).GetChild(j).gameObject;
-                atom.GetComponent<MeshRenderer>().material.color = saveData.atomColors[i][j];
+                atom.GetComponent<MeshRenderer>().material.color = saveData.atomColors[0];
+                saveData.atomColors.RemoveAt(0);
 
                 // Reset vertex color
                 Mesh mesh = atom.GetComponent<MeshFilter>().mesh;
                 Color[] colors = new Color[mesh.colors.Length];
                 for (int k = 0; k < colors.Length; k++)
                 {
-                    colors[k] = saveData.atomVertexColors[j][k];
+                    colors[k] = saveData.atomVertexColors[0];
                 }
                 mesh.colors = colors;
+                saveData.atomVertexColors.RemoveAt(0);
             }
 
             // Edit molecule instance name
