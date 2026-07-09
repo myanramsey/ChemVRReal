@@ -83,10 +83,7 @@ public class RadialMenuController : MonoBehaviour
         }
 
         menuOpen = true;
-        deleteMolecule?.ExitDeleteMode();
-        moleculeScale?.ExitScaleMode();
-        orbitalOpacity?.ExitOpacityMode();
-        toggleBackboneOrbital?.ExitToggleMode();
+        ExitAllModes();
         BuildMenu();
         radialPartCanvas.gameObject.SetActive(true);
         radialPartCanvas.position = handTransform.position;
@@ -223,6 +220,15 @@ public class RadialMenuController : MonoBehaviour
             return;
 
         RadialMenuOption selectedOption = currentMenu.options[currentSelectedIndex];
+        ExitAllModes();
         onOptionConfirmed?.Invoke(selectedOption);
+    }
+
+    void ExitAllModes()
+    {
+        deleteMolecule?.ExitDeleteMode();
+        moleculeScale?.ExitScaleMode();
+        orbitalOpacity?.ExitOpacityMode();
+        toggleBackboneOrbital?.ExitToggleMode();
     }
 }

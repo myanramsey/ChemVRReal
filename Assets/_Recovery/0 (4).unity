@@ -13597,7 +13597,7 @@ MonoBehaviour:
   deleteMolecule: {fileID: 89705659}
   moleculeScale: {fileID: 89705657}
   orbitalOpacity: {fileID: 89705660}
-  toggleBackboneOrbital: {fileID: 89705663}
+  toggleBackboneOrbital: {fileID: 0}
 --- !u!114 &2139456860
 MonoBehaviour:
   m_ObjectHideFlags: 0

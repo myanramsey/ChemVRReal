@@ -8900,8 +8900,7 @@ GameObject:
   - component: {fileID: 835399591}
   - component: {fileID: 835399592}
   - component: {fileID: 835399593}
-  - component: {fileID: 835399594}
-  - component: {fileID: 835399595}
+  - component: {fileID: 2145600000}
   - component: {fileID: 835399597}
   - component: {fileID: 835399596}
   - component: {fileID: 835399598}
@@ -9073,72 +9072,62 @@ MonoBehaviour:
   opacityStep: 0.1
   radialMenuController: {fileID: 2139456859}
   modeIndicator: {fileID: 0}
---- !u!114 &835399594
+--- !u!114 &2145600000
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 835399589}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dea477c27562fd94ab3a7f0334a0459f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ToggleOrbitals
-  rayInteractor: {fileID: 343356257}
+  m_Script: {fileID: 11500000, guid: b6a45565a2c0140779f0dd9d90043b31, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::ToggleBackboneOrbital
+  leftRayInteractor: {fileID: 343356257}
+  rightRayInteractor: {fileID: 1590294730}
   primaryButton:
     m_UseReference: 0
     m_Action:
       m_Name: Primary Button
       m_Type: 0
-      m_ExpectedControlType: 
+      m_ExpectedControlType:
       m_Id: 4f1d17b7-c6a3-4587-9403-d4c18884d1e1
-      m_Processors: 
-      m_Interactions: 
+      m_Processors:
+      m_Interactions:
       m_SingletonActionBindings:
-      - m_Name: 
+      - m_Name:
         m_Id: 300a8823-1be6-478b-94ea-d93c6e948bb9
         m_Path: <XRController>{LeftHand}/{PrimaryButton}
-        m_Interactions: 
-        m_Processors: 
-        m_Groups: 
+        m_Interactions:
+        m_Processors:
+        m_Groups:
         m_Action: Primary Button
         m_Flags: 0
       m_Flags: 0
     m_Reference: {fileID: 0}
---- !u!114 &835399595
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 835399589}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f8782393c7915a419023d70467ab1a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ToggleBackbone
-  rayInteractor: {fileID: 343356257}
-  primaryButton:
+  secondaryButton:
     m_UseReference: 0
     m_Action:
-      m_Name: Primary Button
+      m_Name: Secondary Button
       m_Type: 0
-      m_ExpectedControlType: 
+      m_ExpectedControlType:
       m_Id: cc64545f-e2c5-4125-b11c-3129a23535be
-      m_Processors: 
-      m_Interactions: 
+      m_Processors:
+      m_Interactions:
       m_SingletonActionBindings:
-      - m_Name: 
+      - m_Name:
         m_Id: 39a109e4-5c3e-4ff7-882f-74e91000cbdd
-        m_Path: <XRController>{LeftHand}/{PrimaryButton}
-        m_Interactions: 
-        m_Processors: 
-        m_Groups: 
-        m_Action: Primary Button
+        m_Path: <XRController>{LeftHand}/{SecondaryButton}
+        m_Interactions:
+        m_Processors:
+        m_Groups:
+        m_Action: Secondary Button
         m_Flags: 0
       m_Flags: 0
     m_Reference: {fileID: 0}
+  radialMenuController: {fileID: 2139456859}
+  modeIndicator: {fileID: 0}
 --- !u!114 &835399596
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9180,7 +9169,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 835399589}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 406b8022363047843aceeaae91fd870a, type: 3}
   m_Name: 
@@ -19985,10 +19974,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  deleteMolecule: {fileID: 0}
-  moleculeScale: {fileID: 0}
-  orbitalOpacity: {fileID: 0}
-  toggleBackboneOrbital: {fileID: 0}
+  deleteMolecule: {fileID: 835399597}
+  moleculeScale: {fileID: 89705657}
+  orbitalOpacity: {fileID: 835399593}
+  toggleBackboneOrbital: {fileID: 2145600000}
 --- !u!114 &2139456860
 MonoBehaviour:
   m_ObjectHideFlags: 0

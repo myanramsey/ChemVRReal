@@ -9,14 +9,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f52fd12f3da5f432491d8dad74507144, type: 3}
+  m_Script: {fileID: 11500000, guid: c98b40760b41a4b539ee376d7bbc6ca1, type: 3}
   m_Name: Raycast Color
   m_EditorClassIdentifier: Assembly-CSharp::RadialMenuData
-  menuName: RaycastColorsMenu
+  menuName: Raycast Settings
   options:
+  - id: ray_alpha_increase
+    displayText: 'Increase Opacity '
+    displayColor: {r: 0, g: 1, b: 0.016897976, a: 1}
+    subMenu: {fileID: 0}
+  - id: ray_alpha_decrease
+    displayText: 'Decrease Opacity '
+    displayColor: {r: 1, g: 0, b: 0, a: 1}
+    subMenu: {fileID: 0}
   - id: ray_red
     displayText: Red
-    displayColor: {r: 1, g: 0, b: 0, a: 1}
+    displayColor: {r: 1, g: 0, b: 0, a: 0.972549}
     subMenu: {fileID: 0}
   - id: ray_blue
     displayText: Blue
@@ -24,17 +32,9 @@ MonoBehaviour:
     subMenu: {fileID: 0}
   - id: ray_green
     displayText: Green
-    displayColor: {r: 0, g: 1, b: 0, a: 1}
-    subMenu: {fileID: 0}
-  - id: ray_alpha_increase
-    displayText: Opacity +
-    displayColor: {r: 1, g: 1, b: 1, a: 1}
-    subMenu: {fileID: 0}
-  - id: ray_alpha_decrease
-    displayText: Opacity -
-    displayColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    displayColor: {r: 0, g: 0.3921569, b: 0, a: 1}
     subMenu: {fileID: 0}
   - id: back
     displayText: Back
-    displayColor: {r: 0.38355476, g: 1, b: 0, a: 1}
+    displayColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
     subMenu: {fileID: 0}

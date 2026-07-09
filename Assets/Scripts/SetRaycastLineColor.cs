@@ -4,20 +4,28 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors.Visuals;
 public class SetRaycastLineColor : MonoBehaviour
 {
     public RadialMenuController radialMenuController;
+
+    [Header("Right Hand")]
     public LineRenderer lineRenderer;
     public XRInteractorLineVisual lineVisual;
+
+    [Header("Left Hand")]
+    public LineRenderer lineRendererLeft;
+    public XRInteractorLineVisual lineVisualLeft;
 
     [Header("Alpha Settings")]
     [Range(0.05f, 0.5f)]
     public float alphaStep = 0.1f;
 
     private Gradient cachedGradient = new Gradient();
+    private Gradient cachedGradientLeft = new Gradient();
     private Color currentColor = Color.white;
 
     void Start()
     {
         if (radialMenuController == null) { Debug.LogError("[LineColor] radialMenuController not assigned!"); return; }
         if (lineRenderer == null)         { Debug.LogError("[LineColor] lineRenderer not assigned!"); return; }
+        if (lineRendererLeft == null)     { Debug.LogWarning("[LineColor] lineRendererLeft not assigned - left hand ray color will not update"); }
         radialMenuController.onOptionConfirmed.AddListener(HandleOption);
         Debug.Log("[LineColor] Listener registered");
     }
@@ -54,17 +62,25 @@ public class SetRaycastLineColor : MonoBehaviour
 
     void ApplyColor(Color c)
     {
-        lineRenderer.startColor = c;
-        lineRenderer.endColor = c;
+        ApplyColorTo(lineRenderer, lineVisual, cachedGradient, c);
+        ApplyColorTo(lineRendererLeft, lineVisualLeft, cachedGradientLeft, c);
+    }
 
-        if (lineVisual != null)
+    void ApplyColorTo(LineRenderer renderer, XRInteractorLineVisual visual, Gradient gradient, Color c)
+    {
+        if (renderer == null) return;
+
+        renderer.startColor = c;
+        renderer.endColor = c;
+
+        if (visual != null)
         {
-            cachedGradient.SetKeys(
+            gradient.SetKeys(
                 new GradientColorKey[] { new GradientColorKey(c, 0f), new GradientColorKey(c, 1f) },
                 new GradientAlphaKey[] { new GradientAlphaKey(c.a, 0f), new GradientAlphaKey(c.a, 1f) }
             );
-            lineVisual.validColorGradient = cachedGradient;
-            lineVisual.invalidColorGradient = cachedGradient;
+            visual.validColorGradient = gradient;
+            visual.invalidColorGradient = gradient;
         }
     }
 }
