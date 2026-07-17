@@ -982,6 +982,7 @@ GameObject:
   - component: {fileID: 89705659}
   - component: {fileID: 89705660}
   - component: {fileID: 89705663}
+  - component: {fileID: 89705664}
   m_Layer: 0
   m_Name: RightHand
   m_TagString: Untagged
@@ -1338,6 +1339,22 @@ MonoBehaviour:
     m_Reference: {fileID: 0}
   radialMenuController: {fileID: 2139456859}
   modeIndicator: {fileID: 1142504804}
+--- !u!114 &89705664
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 89705653}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a67134446e73740d3a3a99cd023e4724, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShowMoleculeSpawnMenu
+  xrOrigin: {fileID: 1419543982}
+  moleculeSpawnMenu: {fileID: 953719847}
+  radialMenuController: {fileID: 2139456859}
+  distanceFromPlayer: 1.5
 --- !u!1 &93400195
 GameObject:
   m_ObjectHideFlags: 0
@@ -7065,7 +7082,7 @@ MonoBehaviour:
   leftGripButton:
     m_UseReference: 0
     m_Action:
-      m_Name: 
+      m_Name: Left Grip Button
       m_Type: 0
       m_ExpectedControlType: 
       m_Id: 50991e91-c7af-40ee-9757-7ac01d288b6d
@@ -7077,7 +7094,7 @@ MonoBehaviour:
   rightGripButton:
     m_UseReference: 0
     m_Action:
-      m_Name: 
+      m_Name: Right Grip Button
       m_Type: 0
       m_ExpectedControlType: 
       m_Id: 1ed54de7-565c-407b-ac93-df0457adc3b0
@@ -13574,6 +13591,7 @@ MonoBehaviour:
   radialPartPrefab: {fileID: 1000412028389058626, guid: 97b5c23ee2cbc47d9b8fc459a5591602, type: 3}
   radialPartCanvas: {fileID: 414193440}
   handTransform: {fileID: 89705654}
+  spawnAnchor: {fileID: 0}
   angleBetweenRadialParts: 5
   labelRadius: 80
   labelFontSize: 10
