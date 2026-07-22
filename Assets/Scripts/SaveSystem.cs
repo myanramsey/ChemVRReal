@@ -8,6 +8,7 @@ public class SaveSystem : MonoBehaviour
     [System.Serializable]
     private struct SaveData
     {
+        // ===== Molecule Info =====
         public int numMolecules;
 
         // Molecule names
@@ -22,24 +23,34 @@ public class SaveSystem : MonoBehaviour
         public List<Color> orbitalColors;
         public List<Color> atomColors;
         public List<Color> atomVertexColors;
+
+        // ===== Settings Info =====
+        public int wallColor;
+        public int floorColor;
     }
 
-    private SaveData saveData = new SaveData();
+    private static SaveData saveData = new SaveData();
+
+    private static string saveFolder;
+    private static string saveFileName;
 
     private void Awake()
     {
-        DontDestroyOnLoad(gameObject);
+        saveFolder = Path.Combine(Application.persistentDataPath, "Saves");
+        if (!Directory.Exists(saveFolder))
+        {
+            Directory.CreateDirectory(saveFolder);
+        }
     }
 
     // ========== Saving ==========
-    public void SaveRoom()
+    public static void SaveRoom()
     {
         SaveMolecules();
         Save();
-        Debug.Log("Saved Molecules");
     }
 
-    private void SaveMolecules()
+    private static void SaveMolecules()
     {
         // Initialize lists
         saveData.names = new List<string>();
@@ -91,34 +102,44 @@ public class SaveSystem : MonoBehaviour
         }
     }
 
-    private void Save()
+    private static void Save()
     {
-        string saveFile = Application.persistentDataPath + "/save" + ".save";
+        string[] files = Directory.GetFiles(saveFolder, "*.json");
+        int fileNum = files.Length + 1;
+        string saveFile = Path.Combine(Application.persistentDataPath, "Saves", saveFileName);
         File.WriteAllText(saveFile, JsonUtility.ToJson(saveData, true));
     }
 
     // ========== Loading ==========
-    public void LoadRoom()
+    public static void LoadRoom()
     {
         Load();
     }
 
-    private void Load()
+    private static void Load()
     {
-        string saveFile = Application.persistentDataPath + "/save" + ".save";
+        string saveFile = Path.Combine(Application.persistentDataPath, "Saves", saveFileName);
+
+        if (!File.Exists(saveFile))
+        {
+            return;
+        }
+
         string saveContent = File.ReadAllText(saveFile);
         saveData = JsonUtility.FromJson<SaveData>(saveContent);
 
         SceneManager.sceneLoaded += OnSceneLoaded;
         LoadScene.LoadSceneByIndex(1);
     }
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+
+    private static void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
         LoadMolecules();
+        Settings.RestoreSettings(saveData.wallColor, saveData.floorColor);
     }
 
-    private void LoadMolecules()
+    private static void LoadMolecules()
     {
         Debug.Log(saveData.orbitalColors.Count);
 
@@ -186,5 +207,28 @@ public class SaveSystem : MonoBehaviour
                 });
             }
         }
+    }
+
+    // ========== Mutators ==========
+    public static void SetSaveFileNameAndLoad(string name)
+    {
+        saveFileName = name;
+        LoadRoom();
+    }
+
+    public static void SetSaveFileNameAndSave(string name)
+    {
+        saveFileName = name;
+        SaveRoom();
+    }
+
+    public static void SetWallColor(int color)
+    {
+        saveData.wallColor = color;
+    }
+
+    public static void SetFloorColor(int color)
+    {
+        saveData.floorColor = color;
     }
 }
