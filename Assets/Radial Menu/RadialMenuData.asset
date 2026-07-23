@@ -27,7 +27,7 @@ MonoBehaviour:
     displayColor: {r: 0.5283019, g: 0.5283019, b: 0.5283019, a: 1}
     subMenu: {fileID: 0}
   - id: orbital_settings
-    displayText: Oribital Settings
+    displayText: Orbital Settings
     displayColor: {r: 0.5283019, g: 0.5283019, b: 0.5283019, a: 1}
     subMenu: {fileID: 11400000, guid: 597818931489a4601ab105d6e6b9c0d8, type: 2}
   - id: toggle_backbone_orbital
