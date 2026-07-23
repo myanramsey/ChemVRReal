@@ -11,7 +11,7 @@ public class Screenshot : MonoBehaviour
 
     [SerializeField] private InputActionProperty button;
 
-    [SerializeField] private CanvasGroup screenshotNotifcation;
+    [SerializeField] private CanvasGroup screenshotNotification;
 
     [Header("Haptic Settings")]
     [Range(0, 1)] public float intensity = 0f;
@@ -104,12 +104,12 @@ public class Screenshot : MonoBehaviour
     private IEnumerator FadeSequence()
     {
         // Screenshot notification gradually appears
-        yield return StartCoroutine(Fade(screenshotNotifcation, 0f, 1f, fadeDuration));
+        yield return StartCoroutine(Fade(screenshotNotification, 0f, 1f, fadeDuration));
 
         // Duration that screenshot notifcation is fully visible
         yield return new WaitForSeconds(waitDuration);
 
         // Screenshot notification gradually disappears
-        yield return StartCoroutine(Fade(screenshotNotifcation, 1f, 0f, fadeDuration));
+        yield return StartCoroutine(Fade(screenshotNotification, 1f, 0f, fadeDuration));
     }
 }

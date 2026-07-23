@@ -14,6 +14,9 @@ public class Settings : MonoBehaviour
     private TMP_InputField wallField;
     private TMP_InputField floorField;
 
+    public static int wallColorValue = -1;
+    public static int floorColorValue = -1; 
+
     private void Start()
     {
         // Initalize color arrays
@@ -30,6 +33,19 @@ public class Settings : MonoBehaviour
         // Update max slider values based on number of options
         wallSlider.maxValue = wallColors.Length;
         floorSlider.maxValue = floorColors.Length;
+
+        // Set wall and floor color based on save data (if any)
+        if (wallColorValue != -1)
+        {
+            wallSlider.value = wallColorValue;
+            ChangeWallColor();
+        }
+
+        if (floorColorValue != -1)
+        {
+            floorSlider.value = floorColorValue;
+            ChangeFloorColor();
+        }
     }
 
     public void ChangeWallColor()
@@ -44,6 +60,9 @@ public class Settings : MonoBehaviour
         {
             walls[i].material.color = wallColor;
         }
+
+        // Save wall color in save data
+        SaveSystem.SetWallColor((int)wallSlider.value);
     }
 
     public void ChangeFloorColor()
@@ -55,5 +74,15 @@ public class Settings : MonoBehaviour
         Color floorColor = floorColors[(int)(floorSlider.value - 1)];
 
         floor.material.color = floorColor;
+
+        // Save floor color in save data
+        SaveSystem.SetFloorColor((int)floorSlider.value);
+    }
+
+    // Returns all settings to how they were previously set in saved room
+    public static void RestoreSettings(int wallColor, int floorColor)
+    {
+        wallColorValue = wallColor;
+        floorColorValue = floorColor;
     }
 }
