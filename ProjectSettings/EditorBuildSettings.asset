@@ -14,13 +14,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Main Menu.unity
     guid: 1558ddf69f078d847b691436250b85c3
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Testing_V5_radial_Menu_SubMenue.unity
     guid: eae795ca0f78e47fdb4115676be33baf
   - enabled: 0
     path: Assets/Scenes/Amber-testing2.unity
     guid: b8677ec8e5482884cad1c778613e5c28
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/ChemVR_V2.unity
     guid: 03fd251ce08dbb84c9cd52a6d5a74761
   m_configObjects:

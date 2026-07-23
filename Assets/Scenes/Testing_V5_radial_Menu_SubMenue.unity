@@ -4353,7 +4353,7 @@ MonoBehaviour:
   - {fileID: 1742622855}
   - {fileID: 281491803}
   - {fileID: 928052314}
-  - {fileID: 559647914}
+  - {fileID: 1361169619}
   floor: {fileID: 1276148335}
   wallSlider: {fileID: 1524568759}
   floorSlider: {fileID: 1200817930}
@@ -6844,7 +6844,7 @@ GameObject:
   - component: {fileID: 559647914}
   - component: {fileID: 559647913}
   m_Layer: 0
-  m_Name: Wall (4)
+  m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6941,7 +6941,7 @@ Transform:
   m_LocalScale: {x: 8.785727, y: 0.24, z: 1.0431}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1501633319}
+  m_Father: {fileID: 1914710650}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &563008237
 GameObject:
@@ -15110,7 +15110,7 @@ GameObject:
   - component: {fileID: 1361169619}
   - component: {fileID: 1361169618}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Wall (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15207,7 +15207,7 @@ Transform:
   m_LocalScale: {x: 1.2798039, y: 6.87, z: 18.6621}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1914710650}
+  m_Father: {fileID: 1501633319}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1379070190
 GameObject:
@@ -16615,7 +16615,7 @@ Transform:
   - {fileID: 1742622857}
   - {fileID: 281491805}
   - {fileID: 928052316}
-  - {fileID: 559647916}
+  - {fileID: 1361169621}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1515596270
@@ -20882,7 +20882,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1361169621}
+  - {fileID: 559647916}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1939236605
