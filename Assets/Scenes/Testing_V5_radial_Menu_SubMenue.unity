@@ -1576,8 +1576,8 @@ MonoBehaviour:
       m_Interactions: 
       m_SingletonActionBindings:
       - m_Name: 
-        m_Id: 84486075-f7e9-4813-b9b8-3528da51083b
-        m_Path: <XRController>{LeftHand}/{PrimaryButton}
+        m_Id: ec5152f1-344d-4094-8dec-47e743fdaa83
+        m_Path: <XRController>{LeftHand}/{SecondaryButton}
         m_Interactions: 
         m_Processors: 
         m_Groups: 
@@ -1596,8 +1596,8 @@ MonoBehaviour:
       m_Interactions: 
       m_SingletonActionBindings:
       - m_Name: 
-        m_Id: f7d809b5-7431-4953-9303-7ba922ae422e
-        m_Path: <XRController>{LeftHand}/{SecondaryButton}
+        m_Id: 958cdc81-f006-4121-8c0b-179480800ae5
+        m_Path: <XRController>{LeftHand}/{PrimaryButton}
         m_Interactions: 
         m_Processors: 
         m_Groups: 
@@ -1709,8 +1709,8 @@ MonoBehaviour:
       m_Interactions: 
       m_SingletonActionBindings:
       - m_Name: 
-        m_Id: 0c561735-3a81-47a5-8d1c-dfb375a06b6e
-        m_Path: <XRController>{LeftHand}/{PrimaryButton}
+        m_Id: 7ffbd3a8-e031-41be-ad27-8bccee68a399
+        m_Path: <XRController>{LeftHand}/{SecondaryButton}
         m_Interactions: 
         m_Processors: 
         m_Groups: 
@@ -1729,8 +1729,8 @@ MonoBehaviour:
       m_Interactions: 
       m_SingletonActionBindings:
       - m_Name: 
-        m_Id: 21e6504c-9467-47cc-852d-9efeebf8e9a3
-        m_Path: <XRController>{LeftHand}/{SecondaryButton}
+        m_Id: 65a5fa86-f4f3-44eb-97ef-a9c47bf48e01
+        m_Path: <XRController>{LeftHand}/{PrimaryButton}
         m_Interactions: 
         m_Processors: 
         m_Groups: 
@@ -15963,7 +15963,7 @@ Transform:
   m_GameObject: {fileID: 1419543980}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.262, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

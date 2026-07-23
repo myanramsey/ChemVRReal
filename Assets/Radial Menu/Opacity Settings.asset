@@ -15,7 +15,7 @@ MonoBehaviour:
   menuName: 
   options:
   - id: opacity_molecule
-    displayText: Oribital Opacity
+    displayText: Orbital Opacity
     displayColor: {r: 0.21960784, g: 0.21960784, b: 0.21960784, a: 0.99215686}
     subMenu: {fileID: 0}
   - id: orbital_color
