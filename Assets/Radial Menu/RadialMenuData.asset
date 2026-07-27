@@ -9,32 +9,32 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f52fd12f3da5f432491d8dad74507144, type: 3}
+  m_Script: {fileID: 11500000, guid: c98b40760b41a4b539ee376d7bbc6ca1, type: 3}
   m_Name: RadialMenuData
   m_EditorClassIdentifier: Assembly-CSharp::RadialMenuData
   menuName: Main Menu
   options:
   - id: add_molecule
     displayText: Add Molecule
-    displayColor: {r: 0.41509432, g: 0.41509432, b: 0.41509432, a: 1}
+    displayColor: {r: 0.59748423, g: 0.59748423, b: 0.59748423, a: 1}
     subMenu: {fileID: 0}
   - id: delete_molecule
     displayText: Delete Molecule
-    displayColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    displayColor: {r: 0.6, g: 0.6, b: 0.6, a: 1}
     subMenu: {fileID: 0}
   - id: scale_molecule
     displayText: Scale Molecule
-    displayColor: {r: 0.5283019, g: 0.5283019, b: 0.5283019, a: 1}
+    displayColor: {r: 0.6, g: 0.6, b: 0.6, a: 1}
     subMenu: {fileID: 0}
-  - id: opacity_molecule
-    displayText: Opacity Molecule
-    displayColor: {r: 0.5283019, g: 0.5283019, b: 0.5283019, a: 1}
-    subMenu: {fileID: 0}
+  - id: orbital_settings
+    displayText: Orbital Settings
+    displayColor: {r: 0.6, g: 0.6, b: 0.6, a: 1}
+    subMenu: {fileID: 11400000, guid: 597818931489a4601ab105d6e6b9c0d8, type: 2}
   - id: toggle_backbone_orbital
     displayText: Toggle
-    displayColor: {r: 0.41509432, g: 0.41509432, b: 0.41509432, a: 1}
+    displayColor: {r: 0.6, g: 0.6, b: 0.6, a: 1}
     subMenu: {fileID: 0}
   - id: raycast_colors
     displayText: Raycast Settings
-    displayColor: {r: 0.41509432, g: 0.41509432, b: 0.41509432, a: 1}
+    displayColor: {r: 0.6, g: 0.6, b: 0.6, a: 1}
     subMenu: {fileID: 11400000, guid: 9f8c00db22e7b4473ab65bc5854182ae, type: 2}

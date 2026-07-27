@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using UnityEngine.XR.Interaction.Toolkit.Locomotion.Movement;
+using UnityEngine.XR.Interaction.Toolkit.Locomotion.Turning;
 
 public class RadialMenuController : MonoBehaviour
 {
@@ -13,6 +15,8 @@ public class RadialMenuController : MonoBehaviour
     public GameObject radialPartPrefab;
     public Transform radialPartCanvas;
     public Transform handTransform;
+    [Tooltip("Where the wheel spawns when opened. Assign an empty GameObject anchored to the player (e.g. a child of the XR Origin) rather than the hand, so the menu opens on the player instead of wherever the controller happens to be pointing.")]
+    public Transform spawnAnchor;
     public float angleBetweenRadialParts = 5f;
 
     [Header("Label Settings")]
@@ -35,6 +39,9 @@ public class RadialMenuController : MonoBehaviour
     private int currentSelectedIndex = -1;
     private bool menuOpen = false;
 
+    private ContinuousMoveProvider movement;
+    private ContinuousTurnProvider turning;
+
     void Start()
     {
         if (openButton.action != null)
@@ -45,6 +52,9 @@ public class RadialMenuController : MonoBehaviour
 
         if (radialPartCanvas != null)
             radialPartCanvas.gameObject.SetActive(false);
+
+        movement = FindAnyObjectByType<ContinuousMoveProvider>();
+        turning = FindAnyObjectByType<ContinuousTurnProvider>();
     }
 
     void Update()
@@ -86,8 +96,15 @@ public class RadialMenuController : MonoBehaviour
         ExitAllModes();
         BuildMenu();
         radialPartCanvas.gameObject.SetActive(true);
-        radialPartCanvas.position = handTransform.position;
-        radialPartCanvas.rotation = handTransform.rotation;
+
+        Transform anchor = spawnAnchor != null ? spawnAnchor : handTransform;
+        radialPartCanvas.position = anchor.position;
+        radialPartCanvas.rotation = anchor.rotation;
+
+        // Lock player movement while the radial menu is open so it doesn't
+        // shift underneath them while they're pointing at an option.
+        if (movement != null) movement.enabled = false;
+        if (turning != null) turning.enabled = false;
     }
 
     public void CloseMenu()
@@ -97,6 +114,9 @@ public class RadialMenuController : MonoBehaviour
 
         if (radialPartCanvas != null)
             radialPartCanvas.gameObject.SetActive(false);
+
+        if (movement != null) movement.enabled = true;
+        if (turning != null) turning.enabled = true;
     }
 
     void BuildMenu()
