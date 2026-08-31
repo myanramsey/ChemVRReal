@@ -1,5 +1,8 @@
 using UnityEngine;
 using Unity.XR.CoreUtils;
+using Unity.VisualScripting;
+using UnityEngine.XR.Interaction.Toolkit.Locomotion.Movement;
+using UnityEngine.XR.Interaction.Toolkit.Locomotion.Turning;
 
 // Attach to any always-loaded GameObject and assign colorPickerMenu, radialMenuController,
 // and xrOrigin in the Inspector. Selecting "Orbital Color" in the radial menu teleports the
@@ -9,6 +12,10 @@ public class ShowColorPickerMenu : MonoBehaviour
 {
     [SerializeField] private XROrigin xrOrigin;
     [SerializeField] private GameObject colorPickerMenu;
+
+    [SerializeField] private ColorPickerControl cpc;
+    [SerializeField] private SpawnColorMenu scm;
+    [SerializeField] private SelectMoleculeParts smp;
 
     [Header("Radial Menu")]
     public RadialMenuController radialMenuController;
@@ -50,6 +57,13 @@ public class ShowColorPickerMenu : MonoBehaviour
 
     public void ExitColorMode()
     {
+        if (colorMode) 
+        {
+            cpc.Back();
+            scm.SetIsOpen(false);
+            smp.ResetSelectedMolecule();
+        }
+
         colorMode = false;
         modeIndicator?.ResetToNormal();
     }

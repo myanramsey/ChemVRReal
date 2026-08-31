@@ -6,8 +6,10 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 public class SpawnColorMenu : MonoBehaviour
 {
     [SerializeField] private XROrigin xrOrigin;
-    [SerializeField] private XRRayInteractor rayInteractor;
-    [SerializeField] private InputActionProperty button;
+    [SerializeField] private XRRayInteractor leftRayInteractor;
+    [SerializeField] private XRRayInteractor rightRayInteractor;
+    [SerializeField] private InputActionProperty leftTrigger;
+    [SerializeField] private InputActionProperty rightTrigger;
 
     [SerializeField] private GameObject colorPickerMenu;
 
@@ -32,32 +34,35 @@ public class SpawnColorMenu : MonoBehaviour
 
     private void OnEnable()
     {
-        button.action.Enable();
+        leftTrigger.action.Enable();
+        rightTrigger.action.Enable();
     }
 
     private void OnDisable()
     {
-        button.action.Disable();
+        leftTrigger.action.Disable();
+        rightTrigger.action.Disable();
     }
 
     private void Update()
     {
         if (isOpen) return;
         if (!showColorPickerMenu.colorMode) return;
-        if (!button.action.WasPressedThisFrame()) return;
+        if (!leftTrigger.action.WasPressedThisFrame() && !rightTrigger.action.WasPressedThisFrame()) return;
 
-        rayInteractor.TryGetCurrentRaycast(
-            out RaycastHit? raycastHit,
-            out _,
-            out _,
-            out _,
-            out bool isUIHitClosest
-        );
+        XRRayInteractor rayInteractor = null;
 
-        if (isUIHitClosest || !raycastHit.HasValue) return;
+        if (leftTrigger.action.WasPressedThisFrame())
+            rayInteractor = leftRayInteractor;
+        else if (rightTrigger.action.WasPressedThisFrame())
+            rayInteractor = rightRayInteractor;
+
+        if (rayInteractor == null) return;
+
+        if (!TryGetRaycastHit(rayInteractor, out RaycastHit raycastHit)) return;
 
         // Walk up hierarchy to find molecule root (mirrors RayPointerLogger logic)
-        GameObject hit = raycastHit.Value.collider?.gameObject;
+        GameObject hit = raycastHit.collider?.gameObject;
         if (hit == null) return;
 
         molecule = hit;
@@ -107,5 +112,27 @@ public class SpawnColorMenu : MonoBehaviour
     public GameObject GetGameObject()
     {
         return molecule;
+    }
+
+    private bool TryGetRaycastHit(XRRayInteractor ray, out RaycastHit hit)
+    {
+        hit = default;
+
+        if (ray == null)
+            return false;
+
+        ray.TryGetCurrentRaycast(
+            out RaycastHit? raycastHit,
+            out _,
+            out _,
+            out _,
+            out bool isUIHit
+        );
+
+        if (isUIHit || !raycastHit.HasValue)
+            return false;
+
+        hit = raycastHit.Value;
+        return true;
     }
 }

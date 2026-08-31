@@ -19,7 +19,7 @@ MonoBehaviour:
     displayColor: {r: 0.6, g: 0.6, b: 0.6, a: 0.99215686}
     subMenu: {fileID: 0}
   - id: molecule_color
-    displayText: 'Orbital Color '
+    displayText: 'Molecule Color '
     displayColor: {r: 0.6, g: 0.6, b: 0.6, a: 1}
     subMenu: {fileID: 0}
   - id: back
