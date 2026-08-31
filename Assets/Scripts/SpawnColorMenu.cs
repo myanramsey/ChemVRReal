@@ -11,6 +11,8 @@ public class SpawnColorMenu : MonoBehaviour
 
     [SerializeField] private GameObject colorPickerMenu;
 
+    [SerializeField] private ShowColorPickerMenu showColorPickerMenu;
+
     private ColorPickerControl cpc;
 
     private GameObject molecule;
@@ -41,6 +43,7 @@ public class SpawnColorMenu : MonoBehaviour
     private void Update()
     {
         if (isOpen) return;
+        if (!showColorPickerMenu.colorMode) return;
         if (!button.action.WasPressedThisFrame()) return;
 
         rayInteractor.TryGetCurrentRaycast(

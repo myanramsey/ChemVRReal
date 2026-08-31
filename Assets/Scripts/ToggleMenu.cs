@@ -48,12 +48,11 @@ public class ToggleMenu : MonoBehaviour
             menu.SetActive(false);
 
             // Enable player movement
-            movement.enabled = true;
-            turning.enabled = true;
+            EnableMovement();
         }
         else
         {
-            // Spawn color picker menu in front and facing player
+            // Spawn menu in front and facing player
             Transform vrPlayer = xrOrigin.Camera.transform;
 
             Vector3 targetPos = vrPlayer.position + (vrPlayer.forward * 2f);
@@ -64,11 +63,22 @@ public class ToggleMenu : MonoBehaviour
             menu.transform.rotation = Quaternion.Euler(xRot, targetRot.eulerAngles.y, zRot);
 
             // Disable player movement
-            movement.enabled = false;
-            turning.enabled = false;
+            DisableMovement();
 
             // Set the menu active
             menu.SetActive(true);
         }
+    }
+
+    public void EnableMovement()
+    {
+        movement.enabled = true;
+        turning.enabled = true;
+    }
+
+    public void DisableMovement()
+    {
+        movement.enabled = false;
+        turning.enabled = false;
     }
 }

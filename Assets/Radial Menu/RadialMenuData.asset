@@ -16,7 +16,7 @@ MonoBehaviour:
   options:
   - id: add_molecule
     displayText: Add Molecule
-    displayColor: {r: 0.59748423, g: 0.59748423, b: 0.59748423, a: 1}
+    displayColor: {r: 0.6, g: 0.6, b: 0.6, a: 1}
     subMenu: {fileID: 0}
   - id: delete_molecule
     displayText: Delete Molecule
@@ -28,10 +28,10 @@ MonoBehaviour:
     subMenu: {fileID: 0}
   - id: orbital_settings
     displayText: Orbital Settings
-    displayColor: {r: 0.6, g: 0.6, b: 0.6, a: 1}
+    displayColor: {r: 0.6, g: 0.6, b: 0.6, a: 0.99215686}
     subMenu: {fileID: 11400000, guid: 597818931489a4601ab105d6e6b9c0d8, type: 2}
   - id: toggle_backbone_orbital
-    displayText: Toggle
+    displayText: Toggle On/Off
     displayColor: {r: 0.6, g: 0.6, b: 0.6, a: 1}
     subMenu: {fileID: 0}
   - id: raycast_colors
