@@ -4,6 +4,14 @@ using System;
 using System.IO;
 using System.Collections;
 using UnityEngine.XR.Interaction.Toolkit.Inputs.Haptics;
+using UnityEngine.UI;
+using Unity.XR.CoreUtils;
+using UnityEditor;
+using Unity.VisualScripting;
+using UnityEngine.XR.Interaction.Toolkit.Locomotion.Movement;
+using UnityEngine.XR.Interaction.Toolkit.Locomotion.Turning;
+using static UnityEngine.GraphicsBuffer;
+using static System.Net.Mime.MediaTypeNames;
 
 public class Screenshot : MonoBehaviour
 {
@@ -11,7 +19,15 @@ public class Screenshot : MonoBehaviour
 
     [SerializeField] private InputActionProperty button;
 
+    [SerializeField] private XROrigin xrOrigin;
     [SerializeField] private CanvasGroup screenshotNotification;
+
+    [SerializeField] private GameObject screenshotMenu;
+    [SerializeField] private GameObject captureField;
+    [SerializeField] private RenderTexture renderTexture;
+    [SerializeField] private RawImage rawImage;
+
+    private Texture2D texture;
 
     [Header("Haptic Settings")]
     [Range(0, 1)] public float intensity = 0f;
@@ -20,6 +36,28 @@ public class Screenshot : MonoBehaviour
     [Header("Animation Settings")]
     public float fadeDuration = 1f;
     public float waitDuration = 1f;
+
+    private bool isOpen = false;
+    private byte[] png;
+
+    private ContinuousMoveProvider movement;
+    private ContinuousTurnProvider turning;
+
+    private float height;
+    private float xRot;
+    private float zRot;
+
+    private void Start()
+    {
+        movement = FindAnyObjectByType<ContinuousMoveProvider>();
+        turning = FindAnyObjectByType<ContinuousTurnProvider>();
+
+        height = screenshotMenu.transform.position.y;
+        xRot = screenshotMenu.transform.rotation.eulerAngles.x;
+        zRot = screenshotMenu.transform.rotation.eulerAngles.z;
+
+        texture = new Texture2D(renderTexture.width, renderTexture.height);
+    }
 
     private void OnEnable()
     {
@@ -33,37 +71,73 @@ public class Screenshot : MonoBehaviour
 
     private void Update()
     {
-        if (!button.action.WasPressedThisFrame()) return;
+        if (isOpen) return;
 
-        // Capture screenshot
-        StartCoroutine(TakeScreenshot());
-       
+        if (button.action.IsPressed())
+        {
+            // Show capture field
+            captureField.SetActive(true);
+        }
+
+        if (!button.action.WasReleasedThisFrame()) return;
+
+        StartCoroutine(ScreenshotRoutine());
+
+        // Fade animation
+        //StartCoroutine(FadeSequence());
+    }
+
+    IEnumerator ScreenshotRoutine()
+    {
+        // Remove capture field
+        captureField.SetActive(false);
+
+        yield return new WaitUntil(() => !captureField.activeInHierarchy);
+        yield return new WaitForEndOfFrame();
+
+        // Capture screenshot and save preview of image from render texture
+        yield return StartCoroutine(TakeScreenshot());
+
         // Haptics to let player know screenshot was taken
         TriggerHaptic();
 
-        // Fade animation
-        StartCoroutine(FadeSequence());
+        // Spawn screenshot menu in front and facing player
+        Transform vrPlayer = xrOrigin.Camera.transform;
+
+        Vector3 targetPos = vrPlayer.position + (vrPlayer.forward * 1.5f);
+        targetPos.y = height;
+        screenshotMenu.transform.position = targetPos;
+
+        Quaternion targetRot = Quaternion.LookRotation(vrPlayer.forward);
+        screenshotMenu.transform.rotation = Quaternion.Euler(xRot, targetRot.eulerAngles.y, zRot);
+
+        // Open save screenshot menu
+        screenshotMenu.SetActive(true);
+
+        isOpen = true;
     }
 
     IEnumerator TakeScreenshot()
     {
-        yield return new WaitForEndOfFrame();
+        RenderTexture previous = RenderTexture.active;
+        RenderTexture.active = renderTexture;
 
-#if UNITY_EDITOR
-        ScreenCapture.CaptureScreenshot("Screenshot-" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".png");
-#endif
+        texture.ReadPixels(new Rect(0, 0, renderTexture.width, renderTexture.height), 0, 0);
+        texture.Apply();
 
-#if !UNITY_EDITOR && UNITY_ANDROID
-        SavePNG();
-#endif
+        png = texture.EncodeToPNG();
+        Texture2D decodedTexture = new Texture2D(renderTexture.width, renderTexture.height);
+        decodedTexture.LoadImage(png);
+        rawImage.texture = decodedTexture;
+
+        RenderTexture.active = previous;
+
+        yield return null;
     }
 
-    private void SavePNG()
+    public void SavePNG()
     {
-        Texture2D tex = ScreenCapture.CaptureScreenshotAsTexture();
-        byte[] png = tex.EncodeToPNG();
-        Destroy(tex);
-
+#if !UNITY_EDITOR && UNITY_ANDROID
         // Save to Android's public Pictures directory so it shows in Quest's files
         string filename = "Screenshot-" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".png";
 
@@ -72,11 +146,18 @@ public class Screenshot : MonoBehaviour
             if (success) Debug.Log("Screenshot saved successfully to: " + path);
             else Debug.Log("Failed to save screenshot.");
         });
+#endif
     }
 
     private void TriggerHaptic()
     {
         haptics.SendHapticImpulse(intensity, duration);
+    }
+
+    public void CloseMenu()
+    {
+        screenshotMenu.SetActive(false);
+        isOpen = false;
     }
 
     private IEnumerator Fade(CanvasGroup cg, float startAlpha, float endAlpha, float duration)

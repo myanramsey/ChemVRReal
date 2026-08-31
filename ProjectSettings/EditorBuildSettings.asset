@@ -5,24 +5,15 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Scenes/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
-  - enabled: 0
-    path: Assets/Scenes/Testing V3.unity
-    guid: 9c2048e10e6f64dc98c99ccf0acfba3c
   - enabled: 1
     path: Assets/Scenes/Main Menu.unity
     guid: 1558ddf69f078d847b691436250b85c3
   - enabled: 1
-    path: Assets/Scenes/Testing_V5_radial_Menu_SubMenue.unity
-    guid: eae795ca0f78e47fdb4115676be33baf
-  - enabled: 0
-    path: Assets/Scenes/Amber-testing2.unity
-    guid: b8677ec8e5482884cad1c778613e5c28
-  - enabled: 0
-    path: Assets/Scenes/ChemVR_V2.unity
-    guid: 03fd251ce08dbb84c9cd52a6d5a74761
+    path: Assets/Scenes/Student_Version.unity
+    guid: 59c117c7faac9c2478b28fa486db887d
+  - enabled: 1
+    path: Assets/Scenes/Instructor_Version.unity
+    guid: 461a4dd50c7f9d74e820ef475e129604
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: c348712bda248c246b8c49b3db54643f, type: 3}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: aa0f273fad7009a438a7dadb4bb638bb, type: 2}

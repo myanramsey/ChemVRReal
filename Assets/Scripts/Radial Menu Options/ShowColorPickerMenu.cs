@@ -1,5 +1,8 @@
 using UnityEngine;
 using Unity.XR.CoreUtils;
+using Unity.VisualScripting;
+using UnityEngine.XR.Interaction.Toolkit.Locomotion.Movement;
+using UnityEngine.XR.Interaction.Toolkit.Locomotion.Turning;
 
 // Attach to any always-loaded GameObject and assign colorPickerMenu, radialMenuController,
 // and xrOrigin in the Inspector. Selecting "Orbital Color" in the radial menu teleports the
@@ -9,12 +12,21 @@ public class ShowColorPickerMenu : MonoBehaviour
 {
     [SerializeField] private XROrigin xrOrigin;
     [SerializeField] private GameObject colorPickerMenu;
+
+    [SerializeField] private ColorPickerControl cpc;
+    [SerializeField] private SpawnColorMenu scm;
+    [SerializeField] private SelectMoleculeParts smp;
+
+    [Header("Radial Menu")]
     public RadialMenuController radialMenuController;
+    public ModeIndicator modeIndicator;
 
     public float distanceFromPlayer = 1.5f;
 
     private float height;
     private float xRot, zRot;
+
+    [HideInInspector] public bool colorMode = false;
 
     void Start()
     {
@@ -34,16 +46,25 @@ public class ShowColorPickerMenu : MonoBehaviour
 
     void HandleOption(RadialMenuOption option)
     {
-        if (option.id != "orbital_color") return;
+        if (option.id != "molecule_color") return;
 
-        Transform vrPlayer = xrOrigin.Camera.transform;
-        Vector3 targetPos = vrPlayer.position + (vrPlayer.forward * distanceFromPlayer);
-        targetPos.y = height;
-        colorPickerMenu.transform.position = targetPos;
+        if (option.id == "molecule_color")
+        {
+            colorMode = true;
+            modeIndicator?.SetMode("Color Mode");
+        }
+    }
 
-        Quaternion targetRot = Quaternion.LookRotation(vrPlayer.forward);
-        colorPickerMenu.transform.rotation = Quaternion.Euler(xRot, targetRot.eulerAngles.y, zRot);
+    public void ExitColorMode()
+    {
+        if (colorMode) 
+        {
+            cpc.Back();
+            scm.SetIsOpen(false);
+            smp.ResetSelectedMolecule();
+        }
 
-        colorPickerMenu.SetActive(true);
+        colorMode = false;
+        modeIndicator?.ResetToNormal();
     }
 }

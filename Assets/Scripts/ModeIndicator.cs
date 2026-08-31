@@ -13,7 +13,7 @@ public class ModeIndicator : MonoBehaviour
     public int fontSize = 24;
     public Color textColor = Color.white;
 
-    private string currentMode = "Normal";
+    [HideInInspector] public string currentMode = "";
 
     void Start()
     {
@@ -62,7 +62,7 @@ public class ModeIndicator : MonoBehaviour
 
     public void ResetToNormal()
     {
-        currentMode = "Normal";
+        currentMode = "";
         UpdateDisplay();
     }
 

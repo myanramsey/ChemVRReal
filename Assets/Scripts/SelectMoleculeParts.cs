@@ -4,8 +4,10 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public class SelectMoleculeParts : MonoBehaviour
 {
-    [SerializeField] private XRRayInteractor rayInteractor;
-    [SerializeField] private InputActionProperty button;
+    [SerializeField] private XRRayInteractor leftRayInteractor;
+    [SerializeField] private XRRayInteractor rightRayInteractor;
+    [SerializeField] private InputActionProperty leftTrigger;
+    [SerializeField] private InputActionProperty rightTrigger;
 
     [SerializeField] private GameObject colorPickerMenu;
 
@@ -24,32 +26,34 @@ public class SelectMoleculeParts : MonoBehaviour
 
     private void OnEnable()
     {
-        button.action.Enable();
+        leftTrigger.action.Enable();
+        rightTrigger.action.Enable();
     }
 
     private void OnDisable()
     {
-        button.action.Disable();
+        leftTrigger.action.Disable();
+        rightTrigger.action.Disable();
     }
 
     private void Update()
     {
         if (!scm.GetIsOpen()) return;
-        if (!button.action.WasPressedThisFrame()) return;
+        if (!leftTrigger.action.WasPressedThisFrame() && !rightTrigger.action.WasPressedThisFrame()) return;
+
+        XRRayInteractor rayInteractor = null;
+
+        if (leftTrigger.action.WasPressedThisFrame())
+            rayInteractor = leftRayInteractor;
+        else if (rightTrigger.action.WasPressedThisFrame())
+            rayInteractor = rightRayInteractor;
+
         if (rayInteractor == null) return;
 
-        rayInteractor.TryGetCurrentRaycast(
-            out RaycastHit? raycastHit,
-            out _,
-            out _,
-            out _,
-            out bool isUIHitClosest
-        );
-
-        if (isUIHitClosest || !raycastHit.HasValue) return;
+        if (!TryGetRaycastHit(rayInteractor, out RaycastHit raycastHit)) return;
 
         // Find part of molecule that was hit by raycast
-        GameObject hit = raycastHit.Value.collider?.gameObject;
+        GameObject hit = raycastHit.collider?.gameObject;
         if (hit == null) return;
 
         if (hit.transform.parent != null)
@@ -66,8 +70,8 @@ public class SelectMoleculeParts : MonoBehaviour
         GameObject moleculePart2 = null;
         string moleculePartName = moleculePart.name;
         int index = moleculePartName.IndexOf(" ");
-        moleculePartName = moleculePartName.Substring(0, index);
         if (index == -1) return;
+        moleculePartName = moleculePartName.Substring(0, index);
         
         if (moleculePartName == "Orbital")
         {
@@ -137,5 +141,27 @@ public class SelectMoleculeParts : MonoBehaviour
     {
         currentMolecule = null;
         lastMolecule = null;
+    }
+
+    private bool TryGetRaycastHit(XRRayInteractor ray, out RaycastHit hit)
+    {
+        hit = default;
+
+        if (ray == null)
+            return false;
+
+        ray.TryGetCurrentRaycast(
+            out RaycastHit? raycastHit,
+            out _,
+            out _,
+            out _,
+            out bool isUIHit
+        );
+
+        if (isUIHit || !raycastHit.HasValue)
+            return false;
+
+        hit = raycastHit.Value;
+        return true;
     }
 }
