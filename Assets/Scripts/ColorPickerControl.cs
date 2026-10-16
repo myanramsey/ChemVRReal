@@ -279,6 +279,7 @@ public class ColorPickerControl : MonoBehaviour
         // Save the material colors of all parts of the molecule
         orbitalColors.Clear();
         atomColors.Clear();
+        atomVertexColors.Clear();
 
         // Orbitals
         for (int i = 0; i < molecule.transform.GetChild(0).childCount; i++)

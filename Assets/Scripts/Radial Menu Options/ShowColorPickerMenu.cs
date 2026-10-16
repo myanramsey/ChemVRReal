@@ -57,13 +57,6 @@ public class ShowColorPickerMenu : MonoBehaviour
 
     public void ExitColorMode()
     {
-        if (colorMode) 
-        {
-            cpc.Back();
-            scm.SetIsOpen(false);
-            smp.ResetSelectedMolecule();
-        }
-
         colorMode = false;
         modeIndicator?.ResetToNormal();
     }

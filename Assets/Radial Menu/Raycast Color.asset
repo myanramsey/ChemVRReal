@@ -24,15 +24,19 @@ MonoBehaviour:
     subMenu: {fileID: 0}
   - id: ray_red
     displayText: Red
-    displayColor: {r: 1, g: 0, b: 0, a: 0.972549}
+    displayColor: {r: 1, g: 0, b: 0, a: 1}
     subMenu: {fileID: 0}
   - id: ray_blue
     displayText: Blue
-    displayColor: {r: 0, g: 0, b: 1, a: 1}
+    displayColor: {r: 0, g: 0.0074185133, b: 1, a: 1}
     subMenu: {fileID: 0}
   - id: ray_green
     displayText: Green
     displayColor: {r: 0, g: 0.3921569, b: 0, a: 1}
+    subMenu: {fileID: 0}
+  - id: ray_white
+    displayText: White
+    displayColor: {r: 1, g: 1, b: 1, a: 1}
     subMenu: {fileID: 0}
   - id: back
     displayText: Back

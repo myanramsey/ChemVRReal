@@ -6,6 +6,7 @@ using UnityEngine.XR.Interaction.Toolkit.Locomotion.Movement;
 using UnityEngine.XR.Interaction.Toolkit.Locomotion.Turning;
 using Unity.XR.CoreUtils;
 using UnityEditor;
+using TMPro;
 
 public class RadialMenuController : MonoBehaviour
 {
@@ -37,17 +38,18 @@ public class RadialMenuController : MonoBehaviour
     public OrbitalOpacity orbitalOpacity;
     public ToggleBackboneOrbital toggleBackboneOrbital;
     public ShowColorPickerMenu colorMenu;
+    public ShowMOSliderMenu sliderMenu;
 
     private readonly List<GameObject> spawnedParts = new List<GameObject>();
     private readonly List<GameObject> spawnedImageParts = new List<GameObject>();
     private int currentSelectedIndex = -1;
     private bool menuOpen = false;
 
-    private ContinuousMoveProvider movement;
-    private ContinuousTurnProvider turning;
-
     private RadialMenuOption lastSelectedOption;
     private Color lastSelectedColor;
+
+    private Vector3 menuLocalOffset;
+    private bool hasMenuOffset = false;
 
     void Start()
     {
@@ -59,9 +61,6 @@ public class RadialMenuController : MonoBehaviour
 
         if (radialPartCanvas != null)
             radialPartCanvas.gameObject.SetActive(false);
-
-        movement = FindAnyObjectByType<ContinuousMoveProvider>();
-        turning = FindAnyObjectByType<ContinuousTurnProvider>();
     }
 
     void Update()
@@ -105,19 +104,35 @@ public class RadialMenuController : MonoBehaviour
         radialPartCanvas.gameObject.SetActive(true);
 
         // Spawn radial menu in front and facing player
-        Transform vrPlayer = xrOrigin.Camera.transform;
+        Transform vrPlayer = xrOrigin.transform;
 
-        Vector3 targetPos =handTransform.position + (handTransform.forward * 0.25f);
+        Vector3 targetPos = handTransform.position + (handTransform.forward * 0.25f);
         targetPos.y = handTransform.position.y + 0.1f;
         radialPartCanvas.transform.position = targetPos;
 
         Quaternion targetRot = Quaternion.LookRotation(vrPlayer.forward);
         radialPartCanvas.transform.rotation = Quaternion.Euler(0, targetRot.eulerAngles.y, 0);
 
-        // Lock player movement while the radial menu is open so it doesn't
-        // shift underneath them while they're pointing at an option.
-        if (movement != null) movement.enabled = false;
-        if (turning != null) turning.enabled = false;
+        // Keep track of offset to add to menu if player moves
+        menuLocalOffset = vrPlayer.InverseTransformPoint(radialPartCanvas.position);
+        hasMenuOffset = true;
+    }
+
+    void LateUpdate()
+    {
+        if (!menuOpen || xrOrigin == null || !hasMenuOffset) return;
+
+        float menuFollowSpeed = 1f;
+        Transform vrPlayer = xrOrigin.transform;
+
+        Vector3 targetPos = vrPlayer.TransformPoint(menuLocalOffset);
+        radialPartCanvas.transform.position = targetPos;
+
+        Quaternion targetRot = Quaternion.LookRotation(vrPlayer.forward);
+        radialPartCanvas.transform.rotation = Quaternion.Euler(0, targetRot.eulerAngles.y, 0);
+
+        radialPartCanvas.position = Vector3.Lerp(radialPartCanvas.position, targetPos, Time.deltaTime * menuFollowSpeed);
+        radialPartCanvas.rotation = Quaternion.Slerp(radialPartCanvas.rotation, targetRot, Time.deltaTime * menuFollowSpeed);
     }
 
     public void CloseMenu()
@@ -127,9 +142,6 @@ public class RadialMenuController : MonoBehaviour
 
         if (radialPartCanvas != null)
             radialPartCanvas.gameObject.SetActive(false);
-
-        if (movement != null) movement.enabled = true;
-        if (turning != null) turning.enabled = true;
 
         if (lastSelectedOption != null)
         {
@@ -220,86 +232,109 @@ public class RadialMenuController : MonoBehaviour
 
     void UpdateSelection()
     {
-        /*Vector3 centerToHand = handTransform.position - radialPartCanvas.position;
-        Vector3 projected = Vector3.ProjectOnPlane(centerToHand, radialPartCanvas.forward);
-
-        if (projected.sqrMagnitude < 0.0001f)
-            return;
-
-        float angle = Vector3.SignedAngle(radialPartCanvas.up, projected, -radialPartCanvas.forward);
-        if (angle < 0f)
-            angle += 360f;
-
-        currentSelectedIndex = Mathf.Clamp(
-            (int)(angle * currentMenu.options.Length / 360f),
-            0,
-            currentMenu.options.Length - 1
-        );*/
-
         Ray ray = new Ray(handTransform.position, handTransform.forward);
 
-        if (!Physics.Raycast(ray, out RaycastHit hit))
+        Plane menuPlane = new Plane(radialPartCanvas.forward, radialPartCanvas.position);
+
+        if (!menuPlane.Raycast(ray, out float enter) || enter < 0f)
+        {
+            SetSelectedIndex(-1);
             return;
+        }
 
-        Vector3 centerToHit = hit.point - radialPartCanvas.position;
-        Vector3 projected = Vector3.ProjectOnPlane(
-            centerToHit,
-            radialPartCanvas.forward
-        );
+        Vector3 hitPoint = ray.GetPoint(enter);
 
-        if (projected.sqrMagnitude < 0.0001f)
+        Vector3 localHit = radialPartCanvas.InverseTransformPoint(hitPoint);
+
+        // Assumes the wheel is centered at local (0, 0).
+        float radius = Mathf.Sqrt(localHit.x * localHit.x + localHit.y * localHit.y);
+
+        RectTransform firstPart = spawnedImageParts[0].GetComponent<RectTransform>();
+
+        if (firstPart == null) return;
+
+        // Assumes the radial image is square and centered.
+        float wheelRadius = firstPart.rect.width * 0.5f;
+
+        if (radius > wheelRadius || radius < 0.001f)
+        {
+            SetSelectedIndex(-1);
             return;
-
-        float angle = Vector3.SignedAngle(
-            radialPartCanvas.up,
-            projected,
-            -radialPartCanvas.forward
-        );
+        }
+        
+        float angle = Mathf.Atan2(localHit.x, localHit.y) * Mathf.Rad2Deg;
 
         if (angle < 0f)
+        { 
             angle += 360f;
+        }
 
-        currentSelectedIndex = Mathf.Clamp(
-            (int)(angle * currentMenu.options.Length / 360f),
-            0,
-            currentMenu.options.Length - 1
-        );
+        int partCount = currentMenu.options.Length;
+        float sliceAngle = 360f / partCount;
+
+        int index = Mathf.FloorToInt(angle / sliceAngle);
+
+        float angleWithinSlice = angle % sliceAngle;
+
+        float gap = angleBetweenRadialParts;
+
+        if (angleWithinSlice < gap / 2f || angleWithinSlice > sliceAngle - gap / 2f)
+        {
+            SetSelectedIndex(-1);
+            return;
+        }
+
+        SetSelectedIndex(index);
+    }
+
+    void SetSelectedIndex(int index)
+    {
+        currentSelectedIndex = index;
 
         for (int i = 0; i < spawnedImageParts.Count; i++)
         {
             Image image = spawnedImageParts[i].GetComponent<Image>();
-            if (image == null)
-                continue;
+            if (image == null) continue;
 
             Color baseColor = currentMenu.options[i].displayColor;
 
-            if (i == currentSelectedIndex)
+            if (i == index)
             {
                 image.color = baseColor;
-                spawnedImageParts[i].transform.localScale = Vector3.one * 1.1f;
+                spawnedImageParts[i].transform.localScale =
+                    Vector3.one * 1.1f;
             }
             else
             {
-                image.color = new Color(baseColor.r * 0.45f, baseColor.g * 0.45f, baseColor.b * 0.45f, baseColor.a);
-                spawnedImageParts[i].transform.localScale = Vector3.one;
+                image.color = new Color(
+                    baseColor.r * 0.45f,
+                    baseColor.g * 0.45f,
+                    baseColor.b * 0.45f,
+                    baseColor.a
+                );
+
+                spawnedImageParts[i].transform.localScale =
+                    Vector3.one;
             }
         }
     }
 
     void ConfirmSelection()
     {
+        if (currentSelectedIndex < 0 || currentSelectedIndex >= currentMenu.options.Length) return;
+
         if (lastSelectedOption != null)
         {
             lastSelectedOption.displayColor = lastSelectedColor;
         }
 
-        if (currentSelectedIndex < 0 || currentSelectedIndex >= currentMenu.options.Length)
-            return;
-
         RadialMenuOption selectedOption = currentMenu.options[currentSelectedIndex];
         lastSelectedOption = selectedOption;
         lastSelectedColor = selectedOption.displayColor;
-        selectedOption.displayColor = Color.green;
+        if (!(selectedOption.id == "ray_alpha_increase") && !(selectedOption.id == "ray_alpha_decrease") && !selectedOption.id.StartsWith("ray_"))
+        {
+            selectedOption.displayColor = Color.black;
+        }
         ExitAllModes();
         onOptionConfirmed?.Invoke(selectedOption);
     }
@@ -311,5 +346,6 @@ public class RadialMenuController : MonoBehaviour
         orbitalOpacity?.ExitOpacityMode();
         toggleBackboneOrbital?.ExitToggleMode();
         colorMenu?.ExitColorMode();
+        sliderMenu?.ExitMOMode();
     }
 }

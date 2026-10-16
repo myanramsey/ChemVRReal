@@ -8,8 +8,8 @@ public class DeleteMolecule : MonoBehaviour
     [SerializeField] private XRRayInteractor rightRayInteractor;
 
     [Header("Delete Buttons")]
-    public InputActionProperty leftTrigger;
-    public InputActionProperty rightTrigger;
+    public InputActionProperty button1;
+    public InputActionProperty button2;
 
     [Header("Radial Menu")]
     public RadialMenuController radialMenuController;
@@ -22,8 +22,8 @@ public class DeleteMolecule : MonoBehaviour
         if (radialMenuController != null)
             radialMenuController.onOptionConfirmed.AddListener(HandleOption);
 
-        leftTrigger.action?.Enable();
-        rightTrigger.action?.Enable();
+        button1.action?.Enable();
+        button2.action?.Enable();
     }
 
     void OnDestroy()
@@ -47,23 +47,14 @@ public class DeleteMolecule : MonoBehaviour
         // We detect this by checking if either confirm button was pressed outside of delete mode entry.
         if (!deleteMode) return;
 
-        bool pressed = (leftTrigger.action != null && leftTrigger.action.WasPressedThisFrame())
-                    || (rightTrigger.action != null && rightTrigger.action.WasPressedThisFrame());
+        bool pressedA = (button1.action != null && button1.action.WasPressedThisFrame());
+        bool pressedB = (button2.action != null && button2.action.WasPressedThisFrame());
 
-        if (!pressed) return;
+        if (!pressedA && !pressedB) return;
 
         Debug.Log("[DeleteMolecule] Button pressed in delete mode — checking raycast...");
 
-        XRRayInteractor rayInteractor = null;
-
-        if (leftTrigger.action.WasPressedThisFrame())
-            rayInteractor = leftRayInteractor;
-        else if (rightTrigger.action.WasPressedThisFrame())
-            rayInteractor = rightRayInteractor;
-
-        if (rayInteractor == null) return;
-
-        if (!TryGetRaycastHit(rayInteractor, out RaycastHit raycastHit)) return;
+        if (!TryGetRaycastHit(out RaycastHit raycastHit)) return;
 
         GameObject hit = raycastHit.collider?.gameObject;
         Debug.Log($"[DeleteMolecule] Ray hit: {hit?.name} | tag: {hit?.tag}");
@@ -88,26 +79,42 @@ public class DeleteMolecule : MonoBehaviour
         Debug.Log("[DeleteMolecule] Delete mode OFF.");
     }
 
-    private bool TryGetRaycastHit(XRRayInteractor ray, out RaycastHit hit)
+    private bool TryGetRaycastHit(out RaycastHit hit)
     {
         hit = default;
 
-        if (ray == null)
-            return false;
+        // Check both rays.
+        XRRayInteractor[] rays = { rightRayInteractor, leftRayInteractor };
 
-        ray.TryGetCurrentRaycast(
-            out RaycastHit? raycastHit,
-            out _,
-            out _,
-            out _,
-            out bool isUIHit
-        );
+        foreach (XRRayInteractor ray in rays)
+        {
+            if (ray == null) continue;
 
-        if (isUIHit || !raycastHit.HasValue)
-            return false;
+            bool hasHit = ray.TryGetCurrentRaycast(
+                out RaycastHit? raycastHit,
+                out _, out _, out _, out bool isUIHit
+            );
 
-        hit = raycastHit.Value;
-        return true;
+            if (!hasHit || isUIHit || !raycastHit.HasValue)
+                continue;
+
+            RaycastHit candidateHit = raycastHit.Value;
+
+            GameObject hitObject = candidateHit.collider?.gameObject;
+            if (hitObject == null)
+                continue;
+
+            // Only accept a raycast that hits a molecule.
+            GameObject molecule = FindMoleculeRoot(hitObject);
+
+            if (molecule != null)
+            {
+                hit = candidateHit;
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private GameObject FindMoleculeRoot(GameObject start)

@@ -20,11 +20,11 @@ MonoBehaviour:
     subMenu: {fileID: 0}
   - id: delete_molecule
     displayText: Delete Molecule
-    displayColor: {r: 0.6, g: 0.6, b: 0.6, a: 1}
+    displayColor: {r: 0.6627451, g: 0.6627451, b: 0.6627451, a: 1}
     subMenu: {fileID: 0}
   - id: scale_molecule
     displayText: Scale Molecule
-    displayColor: {r: 0.6, g: 0.6, b: 0.6, a: 1}
+    displayColor: {r: 0.6627451, g: 0.6627451, b: 0.6627451, a: 1}
     subMenu: {fileID: 0}
   - id: orbital_settings
     displayText: Customize Molecule

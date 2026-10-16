@@ -109,17 +109,39 @@ public class ToggleBackboneOrbital : MonoBehaviour
 
     private bool TryGetRaycastHit(out RaycastHit hit)
     {
-        foreach (XRRayInteractor ray in new[] { leftRayInteractor, rightRayInteractor })
+        hit = default;
+
+        // Check both rays.
+        XRRayInteractor[] rays = { rightRayInteractor, leftRayInteractor };
+
+        foreach (XRRayInteractor ray in rays)
         {
             if (ray == null) continue;
-            ray.TryGetCurrentRaycast(out RaycastHit? raycastHit, out _, out _, out _, out bool isUIHit);
-            if (!isUIHit && raycastHit.HasValue)
+
+            bool hasHit = ray.TryGetCurrentRaycast(
+                out RaycastHit? raycastHit,
+                out _, out _, out _, out bool isUIHit
+            );
+
+            if (!hasHit || isUIHit || !raycastHit.HasValue)
+                continue;
+
+            RaycastHit candidateHit = raycastHit.Value;
+
+            GameObject hitObject = candidateHit.collider?.gameObject;
+            if (hitObject == null)
+                continue;
+
+            // Only accept a raycast that hits a molecule.
+            GameObject molecule = FindMoleculeRoot(hitObject);
+
+            if (molecule != null)
             {
-                hit = raycastHit.Value;
+                hit = candidateHit;
                 return true;
             }
         }
-        hit = default;
+
         return false;
     }
 
