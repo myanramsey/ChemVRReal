@@ -1,79 +1,55 @@
 using UnityEngine;
+using UnityEngine.UI;
+using System.Collections.Generic;
+using TMPro;
 
 public class FilterMolecules : MonoBehaviour
 {
     public GameObject moleculeList;
-    private int numMolecules;
+    public TMP_Dropdown dropdown;
+    private List<GameObject> activeMoleculeList = new List<GameObject>();
+    private int numMolecules = 0;
 
     private void Start()
     {
-        numMolecules = moleculeList.transform.childCount;
+        for (int i = 0; i < moleculeList.transform.childCount; i++)
+        {
+            if (moleculeList.transform.GetChild(i).gameObject.activeSelf)
+            {
+                activeMoleculeList.Add(moleculeList.transform.GetChild(i).gameObject);
+                numMolecules++;
+            }
+        }
     }
 
     public void HandleInputData(int val)
     {
-        // All
+        // Shows all molecules
         if (val == 0)
         {
             for (int i = 0; i < numMolecules; i++)
             {
-                moleculeList.transform.GetChild(i).gameObject.SetActive(true);
+                activeMoleculeList[i].SetActive(true);
             }
         }
-        // BF3
-        else if (val == 1)
+        // Individal molecule filtering
+        else
         {
+            string molecule = dropdown.options[val].text;
+
             for (int i = 0; i < numMolecules; i++)
             {
-                string moleculeFileName = moleculeList.transform.GetChild(i).name;
+                string moleculeFileName = activeMoleculeList[i].name;
                 int index = moleculeFileName.IndexOf("_");
-                string molecule = moleculeFileName.Substring(0, index);
+                string moleculeName = moleculeFileName.Substring(0, index);
 
-                if (molecule == "BF3")
+                if (moleculeName == molecule)
                 {
-                    moleculeList.transform.GetChild(i).gameObject.SetActive(true);
+                    activeMoleculeList[i].SetActive(true);
                 }
                 else
                 {
-                    moleculeList.transform.GetChild(i).gameObject.SetActive(false);
-                }
-            }
-        }
-        // NH3
-        else if (val == 2)
-        {
-            for (int i = 0; i < numMolecules; i++)
-            {
-                string moleculeFileName = moleculeList.transform.GetChild(i).name;
-                int index = moleculeFileName.IndexOf("_");
-                string molecule = moleculeFileName.Substring(0, index);
-
-                if (molecule == "NH3")
-                {
-                    moleculeList.transform.GetChild(i).gameObject.SetActive(true);
-                }
-                else
-                {
-                    moleculeList.transform.GetChild(i).gameObject.SetActive(false);
-                }
-            }
-        }
-        // BF3NH3
-        else if (val == 3)
-        {
-            for (int i = 0; i < numMolecules; i++)
-            {
-                string moleculeFileName = moleculeList.transform.GetChild(i).name;
-                int index = moleculeFileName.IndexOf("_");
-                string molecule = moleculeFileName.Substring(0, index);
-
-                if (molecule == "BF3NH3")
-                {
-                    moleculeList.transform.GetChild(i).gameObject.SetActive(true);
-                }
-                else
-                {
-                    moleculeList.transform.GetChild(i).gameObject.SetActive(false);
+                    activeMoleculeList[i].SetActive(false);
                 }
             }
         }

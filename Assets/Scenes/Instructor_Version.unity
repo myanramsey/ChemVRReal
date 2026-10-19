@@ -26939,6 +26939,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FilterMolecules
   moleculeList: {fileID: 1991402305}
+  dropdown: {fileID: 2085568212}
 --- !u!1 &2091227382
 GameObject:
   m_ObjectHideFlags: 0

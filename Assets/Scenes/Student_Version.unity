@@ -9238,6 +9238,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FilterMolecules
   moleculeList: {fileID: 2143672072}
+  dropdown: {fileID: 646192583}
 --- !u!114 &646192583
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25491,7 +25492,7 @@ MonoBehaviour:
   orbitalOpacity: {fileID: 89705660}
   toggleBackboneOrbital: {fileID: 89705663}
   colorMenu: {fileID: 89705667}
-  sliderMenu: {fileID: 0}
+  sliderMenu: {fileID: 89705670}
 --- !u!114 &2139456860
 MonoBehaviour:
   m_ObjectHideFlags: 0
