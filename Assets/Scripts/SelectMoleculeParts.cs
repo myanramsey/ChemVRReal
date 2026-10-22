@@ -89,7 +89,10 @@ public class SelectMoleculeParts : MonoBehaviour
                 GameObject child = moleculePartParent.transform.GetChild(i).gameObject;
                 string childName = child.name;
                 index = childName.IndexOf(" ");
-                childName = childName.Substring(0, index);
+                if (index != -1)
+                {
+                    childName = childName.Substring(0, index);
+                }
 
                 if ((childName == moleculePartName) && (mr == null))
                 {

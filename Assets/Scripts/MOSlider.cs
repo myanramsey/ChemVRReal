@@ -115,7 +115,7 @@ public class MOSlider : MonoBehaviour
         Quaternion targetRot = Quaternion.LookRotation(vrPlayer.forward);
         moSliderMenu.transform.rotation = Quaternion.Euler(xRot, targetRot.eulerAngles.y, zRot);
 
-        // Get molcules of same name
+        // Get molecules of same name
         molecules = Resources.LoadAll<GameObject>("");
 
         string moleculeName = molecule.name.Split('_')[0];
@@ -150,8 +150,7 @@ public class MOSlider : MonoBehaviour
         GameObject newMolecule = Instantiate(moleculeList[(int)slider.value], pos, rot);
         newMolecule.transform.localScale = scale;
         ColorMolecule(newMolecule);
-        int index = newMolecule.name.IndexOf("(");
-        newMolecule.name = newMolecule.name.Substring(0, index);
+        newMolecule.name = newMolecule.name.Replace("(Clone)", "").Trim();
 
         Rigidbody rb = newMolecule.GetComponent<Rigidbody>();
         var grab = newMolecule.GetComponent<UnityEngine.XR.Interaction.Toolkit.Interactables.XRGrabInteractable>();
@@ -198,14 +197,31 @@ public class MOSlider : MonoBehaviour
         for (int i = 0; i < molecule.transform.GetChild(1).childCount; i++)
         {
             GameObject atom = molecule.transform.GetChild(1).GetChild(i).gameObject;
-            Color atomColor = atom.GetComponent<MeshRenderer>().material.color;
+            MeshRenderer mr = atom.GetComponent<MeshRenderer>();
+            Color atomColor = new Color();
+            if (mr != null)
+            {
+                atomColor = mr.material.color;
+            }
             atomColors.Add(atomColor);
 
             // Save vertex colors
-            Mesh mesh = atom.GetComponent<MeshFilter>().mesh;
-            Color[] colors = mesh.colors;
-            Color color = colors[0];
-            atomVertexColors.Add(color);
+            MeshFilter meshFilter = atom.GetComponent<MeshFilter>();
+            Mesh mesh = new Mesh();
+            if (meshFilter != null)
+            {
+                mesh = meshFilter.mesh;
+            }
+            if (mesh.HasVertexAttribute(UnityEngine.Rendering.VertexAttribute.Color))
+            {
+                Color[] colors = mesh.colors;
+                Color color = colors[0];
+                atomVertexColors.Add(color);
+            }
+            else
+            {
+                atomVertexColors.Add(Color.clear);
+            }
         }
     }
 
@@ -222,17 +238,29 @@ public class MOSlider : MonoBehaviour
         for (int i = 0; i < newMolecule.transform.GetChild(1).childCount; i++)
         {
             // Reset material color
-            GameObject atom = newMolecule.transform.GetChild(1).GetChild(i).gameObject;
-            atom.GetComponent<MeshRenderer>().material.color = atomColors[i];
+            GameObject atom = molecule.transform.GetChild(1).GetChild(i).gameObject;
+            MeshRenderer mr = atom.GetComponent<MeshRenderer>();
+            if (mr != null)
+            {
+                mr.material.color = atomColors[i];
+            }
 
             // Reset vertex color
-            Mesh mesh = atom.GetComponent<MeshFilter>().mesh;
-            Color[] colors = new Color[mesh.colors.Length];
-            for (int j = 0; j < colors.Length; j++)
+            MeshFilter meshFilter = atom.GetComponent<MeshFilter>();
+            Mesh mesh = new Mesh();
+            if (meshFilter != null)
             {
-                colors[j] = atomVertexColors[i];
+                mesh = meshFilter.mesh;
             }
-            mesh.colors = colors;
+            if (mesh.HasVertexAttribute(UnityEngine.Rendering.VertexAttribute.Color))
+            {
+                Color[] colors = new Color[mesh.colors.Length];
+                for (int j = 0; j < colors.Length; j++)
+                {
+                    colors[j] = atomVertexColors[i];
+                }
+                mesh.colors = colors;
+            }
         }
     }
 

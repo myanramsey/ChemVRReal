@@ -85,7 +85,12 @@ public class SaveSystem : MonoBehaviour
             for (int j = 0; j < molecules[i].transform.GetChild(1).childCount; j++)
             {
                 GameObject atom = molecules[i].transform.GetChild(1).GetChild(j).gameObject;
-                Color atomColor = atom.GetComponent<MeshRenderer>().material.color;
+                MeshRenderer mr = atom.GetComponent<MeshRenderer>();
+                Color atomColor = new Color();
+                if (mr != null)
+                {
+                    atomColor = atom.GetComponent<MeshRenderer>().material.color;
+                }
                 saveData.atomColors.Add(atomColor);
             }
 
@@ -94,10 +99,22 @@ public class SaveSystem : MonoBehaviour
             {
                 // Save vertex colors
                 GameObject atom = molecules[i].transform.GetChild(1).GetChild(j).gameObject;
-                Mesh mesh = atom.GetComponent<MeshFilter>().mesh;
-                Color[] meshColors = mesh.colors;
-                Color meshColor = meshColors[0];
-                saveData.atomVertexColors.Add(meshColor);
+                MeshFilter meshFilter = atom.GetComponent<MeshFilter>();
+                Mesh mesh = new Mesh();
+                if (meshFilter != null)
+                {
+                    mesh = atom.GetComponent<MeshFilter>().mesh;
+                }
+                if (mesh.HasVertexAttribute(UnityEngine.Rendering.VertexAttribute.Color))
+                {
+                    Color[] meshColors = mesh.colors;
+                    Color meshColor = meshColors[0];
+                    saveData.atomVertexColors.Add(meshColor);
+                }
+                else
+                {
+                    saveData.atomVertexColors.Add(Color.clear);
+                }
             }
         }
     }
@@ -164,23 +181,34 @@ public class SaveSystem : MonoBehaviour
             {
                 // Reset material color
                 GameObject atom = moleculeInstance.transform.GetChild(1).GetChild(j).gameObject;
-                atom.GetComponent<MeshRenderer>().material.color = saveData.atomColors[0];
+                MeshRenderer mr = atom.GetComponent<MeshRenderer>();
+                if (mr != null)
+                {
+                    mr.material.color = saveData.atomColors[0];
+                }
                 saveData.atomColors.RemoveAt(0);
 
                 // Reset vertex color
-                Mesh mesh = atom.GetComponent<MeshFilter>().mesh;
-                Color[] colors = new Color[mesh.colors.Length];
-                for (int k = 0; k < colors.Length; k++)
+                MeshFilter meshFilter = atom.GetComponent<MeshFilter>();
+                Mesh mesh = new Mesh();
+                if (meshFilter != null)
                 {
-                    colors[k] = saveData.atomVertexColors[0];
+                    mesh = meshFilter.mesh;
                 }
-                mesh.colors = colors;
+                if (mesh.HasVertexAttribute(UnityEngine.Rendering.VertexAttribute.Color))
+                {
+                    Color[] colors = new Color[mesh.colors.Length];
+                    for (int k = 0; k < colors.Length; k++)
+                    {
+                        colors[k] = saveData.atomVertexColors[0];
+                    }
+                    mesh.colors = colors;
+                }
                 saveData.atomVertexColors.RemoveAt(0);
             }
 
             // Edit molecule instance name
-            int index = moleculeInstance.name.IndexOf("(");
-            moleculeInstance.name = moleculeInstance.name.Substring(0, index);
+            moleculeInstance.name = moleculeInstance.name.Replace("(Clone)", "").Trim();
 
             // Edit components
             Rigidbody rb = moleculeInstance.GetComponent<Rigidbody>();

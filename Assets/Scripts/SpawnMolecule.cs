@@ -33,8 +33,7 @@ public class SpawnMolecule : MonoBehaviour
         spawnSlot = (spawnSlot + 1) % spawnOffsets.Length;*/
         Vector3 position = t.position + t.right * 0.75f;
         GameObject moleculeInstance = GameObject.Instantiate(molecule, position, Quaternion.identity);
-        int index = moleculeInstance.name.IndexOf("(");
-        moleculeInstance.name = moleculeInstance.name.Substring(0, index);
+        moleculeInstance.name = prefabName;
 
         Rigidbody rb = moleculeInstance.GetComponent<Rigidbody>();
         var grab = moleculeInstance.GetComponent<UnityEngine.XR.Interaction.Toolkit.Interactables.XRGrabInteractable>();
